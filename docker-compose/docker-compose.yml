@@ -42,6 +42,7 @@ services:
       cub kafka-ready -b kafka:9092 1 30 &&
       kafka-topics --create --if-not-exists --bootstrap-server kafka:9092 --partitions 3 --replication-factor 1 --topic order-topic &&
       kafka-topics --create --if-not-exists --bootstrap-server kafka:9092 --partitions 3 --replication-factor 1 --topic payment-topic &&
+      kafka-topics --create --if-not-exists --bootstrap-server kafka:9092 --partitions 1 --replication-factor 1 --topic spring-cloud-bus &&
       echo 'Topics created'
       "
     extends:
