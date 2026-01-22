@@ -1,9 +1,17 @@
 package com.eventdriven.processor.stream;
 
 import com.eventdriven.processor.ProcessorApplicationTests;
+import com.eventdriven.processor.dto.OrderAvaiableDto;
 import com.eventdriven.processor.dto.OrderDto;
+import com.eventdriven.processor.enums.ProcessorEnum;
+import com.eventdriven.processor.service.IRandomAvaiableService;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mockito;
+import org.mockito.MockitoAnnotations;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.stream.binder.test.InputDestination;
 import org.springframework.cloud.stream.binder.test.OutputDestination;
@@ -11,7 +19,9 @@ import org.springframework.cloud.stream.binder.test.TestChannelBinderConfigurati
 import org.springframework.context.annotation.Import;
 import org.springframework.messaging.Message;
 import org.springframework.messaging.support.MessageBuilder;
+import org.springframework.test.context.bean.override.mockito.MockitoBean;
 
+import java.io.IOException;
 import java.math.BigDecimal;
 
 @Import(TestChannelBinderConfiguration.class)
@@ -23,17 +33,37 @@ public class ProcessorApplicationintegrationTest extends ProcessorApplicationTes
     @Autowired
     private InputDestination inputDestination;
 
-    @Test
-    public void processor()
+    @MockitoBean
+    private IRandomAvaiableService service;
+
+    AutoCloseable autoCloseable;
+
+    @BeforeEach
+    public void init()
     {
+        autoCloseable = MockitoAnnotations.openMocks(this);
+    }
+
+    @AfterEach
+    public void close() throws Exception {
+        autoCloseable.close();
+    }
+
+    @Test
+    public void processor() throws IOException {
         //given
+        Mockito.when(service.isAvaiable()).thenReturn(ProcessorEnum.IN_STOCK.getValue());
         OrderDto orderDto = new OrderDto("apple",new BigDecimal("10.2"));
+        OrderAvaiableDto check = new OrderAvaiableDto(orderDto,ProcessorEnum.IN_STOCK.getValue());
         Message<OrderDto> messageInput = MessageBuilder.withPayload(orderDto).build();
         //when
         inputDestination.send(messageInput,"order-topic");
         Message<byte[]> receive = outputDestination.receive(5000,"stock-topic");
         //then
+        ObjectMapper objectMapper = new ObjectMapper();
+        OrderAvaiableDto result = objectMapper.readValue(receive.getPayload(),OrderAvaiableDto.class);
         Assertions.assertNotNull(receive);
+        Assertions.assertEquals(result,check);
     }
 
 }
