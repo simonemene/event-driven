@@ -48,6 +48,22 @@ services:
       file: common-config.yml
       service: common-network
 
+  configserver:
+    image: "configserver:s1"
+    container_name: configserver
+    ports:
+      - "8081:8081"
+    healthcheck:
+      test: ["CMD","curl","-f","http://configserver:8081/actuator/health/readiness"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+    depends_on:
+      - kafka-init-topics
+    extends:
+      file: common-config.yml
+      service: common-network
+
   sourceservice:
     image: "source:s1"
     container_name: source
@@ -55,9 +71,11 @@ services:
       - "8080:8080"
     environment:
        SPRING_CLOUD_STREAM_KAFKA_BINDER_BROKERS: kafka:9092
-       SPRING_CLOUD_STREAM_ORDER_OUT_0_DESTINATION: order-topic
+       SPRING_CLOUD_STREAM_BINDINGS_ORDER_OUT_0_DESTINATION: order-topic
+       SPRING_CONFIG_IMPORT: configserver:http://configserver:8081/
     depends_on:
-      - kafka-init-topics
+      configserver:
+        condition: service_healthy
     extends:
       file: common-config.yml
       service: common-network
