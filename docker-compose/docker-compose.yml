@@ -81,6 +81,23 @@ services:
       file: common-config.yml
       service: common-network
 
+  processorservice:
+    image: "processor:s1"
+    container_name: processor
+    ports:
+      - "8082:8082"
+    environment:
+      SPRING_CLOUD_STREAM_KAFKA_BINDER_BROKERS: kafka:9092
+      SPRING_CLOUD_STREAM_BINDINGS_ORDERCHECKAVAIABLE_OUT_0_DESTINATION: stock-topic
+      SPRING_CLOUD_STREAM_BINDINGS_ORDERCHECKAVAIABLE_IN_0_DESTINATION: order-topic
+      SPRING_CONFIG_IMPORT: configserver:http://configserver:8081/
+    depends_on:
+      configserver:
+        condition: service_healthy
+    extends:
+      file: common-config.yml
+      service: common-network
+
 
 networks:
   eventdriven:
