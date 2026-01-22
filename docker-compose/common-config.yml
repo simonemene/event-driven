@@ -1,0 +1,4 @@
+services:
+  common-network:
+    networks:
+      - eventdriven
