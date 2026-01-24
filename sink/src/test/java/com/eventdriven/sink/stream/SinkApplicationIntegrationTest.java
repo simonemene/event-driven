@@ -7,26 +7,30 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.stream.binder.test.InputDestination;
-import org.springframework.cloud.stream.binder.test.OutputDestination;
 import org.springframework.cloud.stream.binder.test.TestChannelBinderConfiguration;
 import org.springframework.context.annotation.Import;
 import org.springframework.jdbc.core.simple.JdbcClient;
-import org.springframework.messaging.Message;
 import org.springframework.messaging.support.MessageBuilder;
+import org.springframework.test.context.TestPropertySource;
 
 import java.math.BigDecimal;
 
+@TestPropertySource(
+        properties = {
+                "spring.datasource.url=jdbc:h2:mem:testdb",
+                "spring.datasource.username=sa",
+                "spring.datasource.password=",
+                "spring.datasource.driver-class-name=org.h2.Driver"
+        }
+)
 @Import(TestChannelBinderConfiguration.class)
 public class SinkApplicationIntegrationTest extends SinkApplicationTests {
 
     @Autowired
-    private InputDestination inputDestination;
-
-    @Autowired
-    private OutputDestination outputDestination;
-
-    @Autowired
     private JdbcClient jdbcClient;
+
+    @Autowired
+    private InputDestination inputDestination;
 
     @Test
     public void readAndSave()
@@ -38,11 +42,12 @@ public class SinkApplicationIntegrationTest extends SinkApplicationTests {
                 new OrderAvaiableDto(order,"IN_STOCK");
         //when
         inputDestination.send(MessageBuilder.withPayload(dto).build(),
-                        "stock-topic");
-        Message<byte[]> outMessage = outputDestination
-                .receive(5000,"stock-topic");
+                "stock-topic");
         //then
-        Assertions.assertNotNull(outMessage.getPayload());
+        String name = jdbcClient.sql("SELECT NAME FROM ORDER_AVAIABLE")
+                        .query()
+                        .singleValue().toString();
+        Assertions.assertEquals("phone",dto.order().nameOrder());
 
     }
 
