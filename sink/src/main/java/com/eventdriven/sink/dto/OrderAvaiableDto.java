@@ -1,6 +1,10 @@
 package com.eventdriven.sink.dto;
 
-import com.eventdriven.processor.dto.OrderDto;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
 
-public record OrderAvaiableDto(OrderDto order, String avaiable){}
+public record OrderAvaiableDto(
+        @Valid @NotNull OrderDto order,
+        @NotEmpty String avaiable){}
 
