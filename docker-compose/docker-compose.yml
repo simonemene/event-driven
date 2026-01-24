@@ -41,7 +41,7 @@ services:
       echo 'Waiting for Kafka...' &&
       cub kafka-ready -b kafka:9092 1 30 &&
       kafka-topics --create --if-not-exists --bootstrap-server kafka:9092 --partitions 3 --replication-factor 1 --topic order-topic &&
-      kafka-topics --create --if-not-exists --bootstrap-server kafka:9092 --partitions 3 --replication-factor 1 --topic payment-topic &&
+      kafka-topics --create --if-not-exists --bootstrap-server kafka:9092 --partitions 3 --replication-factor 1 --topic stock-topic &&
       kafka-topics --create --if-not-exists --bootstrap-server kafka:9092 --partitions 1 --replication-factor 1 --topic spring-cloud-bus &&
       echo 'Topics created'
       "
@@ -77,6 +77,8 @@ services:
     depends_on:
       configserver:
         condition: service_healthy
+      processorservice:
+        condition: service_healthy
     extends:
       file: common-config.yml
       service: common-network
@@ -86,6 +88,11 @@ services:
     container_name: processor
     ports:
       - "8082:8082"
+    healthcheck:
+      test: [ "CMD","curl","-f","http://processorservice:8082/actuator/health/readiness" ]
+      interval: 10s
+      timeout: 5s
+      retries: 10
     environment:
       SPRING_CLOUD_STREAM_KAFKA_BINDER_BROKERS: kafka:9092
       SPRING_CLOUD_STREAM_BINDINGS_ORDERCHECKAVAIABLE_OUT_0_DESTINATION: stock-topic

@@ -3,24 +3,27 @@ package com.eventdriven.processor.stream;
 import com.eventdriven.processor.dto.OrderAvaiableDto;
 import com.eventdriven.processor.dto.OrderDto;
 import com.eventdriven.processor.service.IRandomAvaiableService;
-import lombok.RequiredArgsConstructor;
+import com.eventdriven.processor.service.RandomAvaiableService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 import java.util.function.Function;
 
-@RequiredArgsConstructor
 @Configuration
 public class ProcessorConfiguration {
 
-    private final IRandomAvaiableService service;
+    @Bean
+    public IRandomAvaiableService service()
+    {
+        return new RandomAvaiableService();
+    }
 
     @Bean
-    public Function<OrderDto, OrderAvaiableDto> orderCheckAvaiable()
+    public Function<OrderDto, OrderAvaiableDto> orderCheckAvaiable(IRandomAvaiableService randomAvaiableService)
     {
         return checkAvaiable->
         {
-            return new OrderAvaiableDto(checkAvaiable,service.isAvaiable());
+            return new OrderAvaiableDto(checkAvaiable,randomAvaiableService.isAvaiable());
         };
     }
 }
