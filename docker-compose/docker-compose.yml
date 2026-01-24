@@ -55,7 +55,7 @@ services:
     ports:
       - "8081:8081"
     healthcheck:
-      test: ["CMD","curl","-f","http://configserver:8081/actuator/health/readiness"]
+      test: ["CMD","curl","-f","http://localhost:8081/actuator/health/readiness"]
       interval: 10s
       timeout: 5s
       retries: 10
@@ -77,8 +77,6 @@ services:
     depends_on:
       configserver:
         condition: service_healthy
-      processorservice:
-        condition: service_healthy
     extends:
       file: common-config.yml
       service: common-network
@@ -86,13 +84,6 @@ services:
   processorservice:
     image: "processor:s1"
     container_name: processor
-    ports:
-      - "8082:8082"
-    healthcheck:
-      test: [ "CMD","curl","-f","http://processorservice:8082/actuator/health/readiness" ]
-      interval: 10s
-      timeout: 5s
-      retries: 10
     environment:
       SPRING_CLOUD_STREAM_KAFKA_BINDER_BROKERS: kafka:9092
       SPRING_CLOUD_STREAM_BINDINGS_ORDERCHECKAVAIABLE_OUT_0_DESTINATION: stock-topic
