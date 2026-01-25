@@ -11,14 +11,15 @@ services:
       MYSQL_PASSWORD: apppwd
     ports:
       - "3306:3306"
-    volumes:
-      - mysql_data:/var/lib/mysql
     healthcheck:
       test: [ "CMD-SHELL", "mysqladmin ping -h 127.0.0.1 -uroot -p$${MYSQL_ROOT_PASSWORD} --silent" ]
       interval: 5s
       timeout: 3s
       retries: 20
       start_period: 20s
+    extends:
+      file: common-config.yml
+      service: common-network
 
   kafka:
     image: confluentinc/cp-kafka:7.6.1
@@ -76,9 +77,9 @@ services:
       - "8081:8081"
     healthcheck:
       test: ["CMD","curl","-f","http://localhost:8081/actuator/health/readiness"]
-      interval: 10s
+      interval: 15s
       timeout: 5s
-      retries: 10
+      retries: 15
     depends_on:
       - kafka-init-topics
     extends:
@@ -129,6 +130,9 @@ services:
       SPRING_CLOUD_STREAM_KAFKA_BINDER_BROKERS: kafka:9092
       SPRING_CLOUD_STREAM_BINDINGS_CONSUMER_IN_0_DESTINATION: stock-topic
       SPRING_CONFIG_IMPORT: configserver:http://configserver:8081/
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/appdb
+      SPRING_DATASOURCE_USERNAME: appuser
+      SPRING_DATASOURCE_PASSWORD: apppwd
     depends_on:
       configserver:
         condition: service_healthy

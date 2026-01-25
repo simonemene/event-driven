@@ -17,6 +17,7 @@ public class ConvertOrderToOrderAvaiableService implements IConvertOrderService{
     @Transactional
     @Override
     public void convertAndSave(OrderAvaiableDto order) {
+        System.out.println("ordine ricevuto");
         OrderAvaiableEntity entity = mapper.toEntity(order);
         repository.save(entity);
     }

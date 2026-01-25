@@ -6,7 +6,6 @@ import com.eventdriven.sink.repository.OrderAvaiableRepository;
 import com.eventdriven.sink.service.ConvertOrderToOrderAvaiableService;
 import com.eventdriven.sink.service.IConvertOrderService;
 import jakarta.validation.Valid;
-import org.aspectj.weaver.ast.Or;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
