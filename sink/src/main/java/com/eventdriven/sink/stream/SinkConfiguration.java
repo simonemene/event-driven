@@ -1,9 +1,9 @@
 package com.eventdriven.sink.stream;
 
-import com.eventdriven.sink.dto.OrderAvaiableDto;
+import com.eventdriven.sink.dto.OrderAvailableDto;
 import com.eventdriven.sink.mapper.OrderMapper;
 import com.eventdriven.sink.repository.OrderAvaiableRepository;
-import com.eventdriven.sink.service.ConvertOrderToOrderAvaiableService;
+import com.eventdriven.sink.service.ConvertOrderToOrderAvailableService;
 import com.eventdriven.sink.service.IConvertOrderService;
 import jakarta.validation.Valid;
 import org.springframework.context.annotation.Bean;
@@ -15,7 +15,7 @@ import java.util.function.Consumer;
 public class SinkConfiguration {
 
     @Bean
-    public Consumer<@Valid OrderAvaiableDto> consumer(IConvertOrderService service)
+    public Consumer<@Valid OrderAvailableDto> consumer(IConvertOrderService service)
     {
         return service::convertAndSave;
     }
@@ -31,6 +31,6 @@ public class SinkConfiguration {
             OrderMapper orderMapper,
             OrderAvaiableRepository orderAvaiableRepository)
     {
-        return new ConvertOrderToOrderAvaiableService(orderMapper,orderAvaiableRepository);
+        return new ConvertOrderToOrderAvailableService(orderMapper,orderAvaiableRepository);
     }
 }

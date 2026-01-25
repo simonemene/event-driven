@@ -1,8 +1,7 @@
 package com.eventdriven.sink.repository;
 
-import com.eventdriven.sink.entity.OrderAvaiableEntity;
+import com.eventdriven.sink.entity.OrderAvailableEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.repository.Repository;
 
-public interface OrderAvaiableRepository extends JpaRepository<OrderAvaiableEntity,Long> {
+public interface OrderAvaiableRepository extends JpaRepository<OrderAvailableEntity,Long> {
 }

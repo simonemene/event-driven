@@ -1,8 +1,8 @@
 package com.eventdriven.sink.service;
 
-import com.eventdriven.sink.dto.OrderAvaiableDto;
+import com.eventdriven.sink.dto.OrderAvailableDto;
 
 public interface IConvertOrderService {
 
-    void convertAndSave(OrderAvaiableDto order);
+    void convertAndSave(OrderAvailableDto order);
 }

@@ -1,6 +1,6 @@
 package com.eventdriven.processor.service;
 
-public interface IRandomAvaiableService {
+public interface IRandomAvailableService {
 
     String isAvaiable();
 }

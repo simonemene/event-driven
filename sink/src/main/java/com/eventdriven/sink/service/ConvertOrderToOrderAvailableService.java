@@ -1,14 +1,14 @@
 package com.eventdriven.sink.service;
 
-import com.eventdriven.sink.dto.OrderAvaiableDto;
-import com.eventdriven.sink.entity.OrderAvaiableEntity;
+import com.eventdriven.sink.dto.OrderAvailableDto;
+import com.eventdriven.sink.entity.OrderAvailableEntity;
 import com.eventdriven.sink.mapper.OrderMapper;
 import com.eventdriven.sink.repository.OrderAvaiableRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.transaction.annotation.Transactional;
 
 @RequiredArgsConstructor
-public class ConvertOrderToOrderAvaiableService implements IConvertOrderService{
+public class ConvertOrderToOrderAvailableService implements IConvertOrderService{
 
     private final OrderMapper mapper;
 
@@ -16,9 +16,8 @@ public class ConvertOrderToOrderAvaiableService implements IConvertOrderService{
 
     @Transactional
     @Override
-    public void convertAndSave(OrderAvaiableDto order) {
-        System.out.println("ordine ricevuto");
-        OrderAvaiableEntity entity = mapper.toEntity(order);
+    public void convertAndSave(OrderAvailableDto order) {
+        OrderAvailableEntity entity = mapper.toEntity(order);
         repository.save(entity);
     }
 }

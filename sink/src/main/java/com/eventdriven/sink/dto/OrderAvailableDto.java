@@ -4,7 +4,7 @@ import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 
-public record OrderAvaiableDto(
+public record OrderAvailableDto(
         @Valid @NotNull OrderDto order,
         @NotEmpty String avaiable){}
 

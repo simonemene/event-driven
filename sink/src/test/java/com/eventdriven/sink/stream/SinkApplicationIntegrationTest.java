@@ -1,7 +1,7 @@
 package com.eventdriven.sink.stream;
 
 import com.eventdriven.sink.SinkApplicationTests;
-import com.eventdriven.sink.dto.OrderAvaiableDto;
+import com.eventdriven.sink.dto.OrderAvailableDto;
 import com.eventdriven.sink.dto.OrderDto;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -38,13 +38,13 @@ public class SinkApplicationIntegrationTest extends SinkApplicationTests {
         //given
         OrderDto order =
                 new OrderDto("phone",new BigDecimal("12.12"));
-        OrderAvaiableDto dto =
-                new OrderAvaiableDto(order,"IN_STOCK");
+        OrderAvailableDto dto =
+                new OrderAvailableDto(order,"IN_STOCK");
         //when
         inputDestination.send(MessageBuilder.withPayload(dto).build(),
                 "stock-topic");
         //then
-        String name = jdbcClient.sql("SELECT NAME FROM ORDER_AVAIABLE")
+        String name = jdbcClient.sql("SELECT NAME FROM ORDER_AVAILABLE")
                         .query()
                         .singleValue().toString();
         Assertions.assertEquals("phone",dto.order().nameOrder());

@@ -1,13 +1,13 @@
 package com.eventdriven.sink.mapper;
 
-import com.eventdriven.sink.dto.OrderAvaiableDto;
-import com.eventdriven.sink.entity.OrderAvaiableEntity;
+import com.eventdriven.sink.dto.OrderAvailableDto;
+import com.eventdriven.sink.entity.OrderAvailableEntity;
 
 public class OrderMapper {
 
-    public OrderAvaiableEntity toEntity(OrderAvaiableDto dto)
+    public OrderAvailableEntity toEntity(OrderAvailableDto dto)
     {
-        return OrderAvaiableEntity
+        return OrderAvailableEntity
                 .builder()
                 .cost(dto.order().costOrder())
                 .name(dto.order().nameOrder())

@@ -9,9 +9,9 @@ import java.sql.Timestamp;
 
 @Builder
 @Getter
-@Table(name = "ORDER_AVAIABLE")
+@Table(name = "ORDER_AVAILABLE")
 @Entity
-public class OrderAvaiableEntity {
+public class OrderAvailableEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

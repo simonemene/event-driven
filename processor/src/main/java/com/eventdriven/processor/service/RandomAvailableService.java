@@ -4,7 +4,7 @@ import com.eventdriven.processor.enums.ProcessorEnum;
 
 import java.util.Random;
 
-public class RandomAvaiableService implements IRandomAvaiableService{
+public class RandomAvailableService implements IRandomAvailableService {
 
     @Override
     public String isAvaiable() {

@@ -1,10 +1,10 @@
 package com.eventdriven.processor.stream;
 
 import com.eventdriven.processor.ProcessorApplicationTests;
-import com.eventdriven.processor.dto.OrderAvaiableDto;
+import com.eventdriven.processor.dto.OrderAvailableDto;
 import com.eventdriven.processor.dto.OrderDto;
 import com.eventdriven.processor.enums.ProcessorEnum;
-import com.eventdriven.processor.service.IRandomAvaiableService;
+import com.eventdriven.processor.service.IRandomAvailableService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
@@ -34,7 +34,7 @@ public class ProcessorApplicationintegrationTest extends ProcessorApplicationTes
     private InputDestination inputDestination;
 
     @MockitoBean
-    private IRandomAvaiableService service;
+    private IRandomAvailableService service;
 
     AutoCloseable autoCloseable;
 
@@ -54,14 +54,14 @@ public class ProcessorApplicationintegrationTest extends ProcessorApplicationTes
         //given
         Mockito.when(service.isAvaiable()).thenReturn(ProcessorEnum.IN_STOCK.getValue());
         OrderDto orderDto = new OrderDto("apple",new BigDecimal("10.2"));
-        OrderAvaiableDto check = new OrderAvaiableDto(orderDto,ProcessorEnum.IN_STOCK.getValue());
+        OrderAvailableDto check = new OrderAvailableDto(orderDto,ProcessorEnum.IN_STOCK.getValue());
         Message<OrderDto> messageInput = MessageBuilder.withPayload(orderDto).build();
         //when
         inputDestination.send(messageInput,"order-topic");
         Message<byte[]> receive = outputDestination.receive(5000,"stock-topic");
         //then
         ObjectMapper objectMapper = new ObjectMapper();
-        OrderAvaiableDto result = objectMapper.readValue(receive.getPayload(),OrderAvaiableDto.class);
+        OrderAvailableDto result = objectMapper.readValue(receive.getPayload(), OrderAvailableDto.class);
         Assertions.assertNotNull(receive);
         Assertions.assertEquals(result,check);
     }
