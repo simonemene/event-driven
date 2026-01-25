@@ -23,7 +23,7 @@ import java.math.BigDecimal;
                 "spring.datasource.driver-class-name=org.h2.Driver"
         }
 )
-@Import(TestChannelBinderConfiguration.class)
+@Import({TestChannelBinderConfiguration.class, SinkConfiguration.class})
 public class SinkApplicationIntegrationTest extends SinkApplicationTests {
 
     @Autowired

@@ -8,8 +8,5 @@ import org.springframework.test.context.ActiveProfiles;
 @SpringBootTest
 public class SinkApplicationTests {
 
-	@Test
-	void contextLoads() {
-	}
 
 }
