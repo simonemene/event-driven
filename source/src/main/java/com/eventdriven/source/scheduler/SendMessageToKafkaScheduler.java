@@ -4,6 +4,7 @@ import com.eventdriven.source.entity.MessageEntity;
 import com.eventdriven.source.enums.StatusEnum;
 import com.eventdriven.source.savemessage.MessageRespository;
 import com.eventdriven.source.service.IBrokerService;
+import jakarta.persistence.OptimisticLockException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -32,20 +33,22 @@ public class SendMessageToKafkaScheduler {
 
 		for(MessageEntity message : lastMessage)
 		{
-			try{
+			try {
+				message.setStatus(StatusEnum.IN_PROGRESS);
+				message = respository.save(message);
 				service.send(message);
 				message.setStatus(StatusEnum.SEND);
 				message.setSendTimestamp(Instant.now());
+			}catch(OptimisticLockException lock)
+			{
+				log.info("Message idevent {} already processed by another pod",message.getEventId());
+				continue;
 			}catch(Exception e)
 			{
 				message.setAttempts(message.getAttempts() + 1);
-				if(message.getAttempts()>3)
-				{
-					message.setStatus(StatusEnum.PARKING);
-				}else
-				{
-					message.setStatus(StatusEnum.FAILED);
-				}
+				message.setStatus(message.getAttempts()>3?
+						StatusEnum.PARKING:
+						StatusEnum.FAILED);
 				log.error("Failed message {} ", message.getEventId(),e);
 			}
 			respository.save(message);
