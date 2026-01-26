@@ -27,6 +27,6 @@ public class KafkaService implements IBrokerService{
 
 	public void fallback(MessageEntity event,Throwable ex)
 	{
-		throw new RuntimeException("kafak send failed",ex);
+		throw new RuntimeException("kafka send failed",ex);
 	}
 }
