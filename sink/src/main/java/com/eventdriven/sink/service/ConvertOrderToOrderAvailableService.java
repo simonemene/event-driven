@@ -5,8 +5,10 @@ import com.eventdriven.sink.entity.OrderAvailableEntity;
 import com.eventdriven.sink.mapper.OrderMapper;
 import com.eventdriven.sink.repository.OrderAvaiableRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.transaction.annotation.Transactional;
 
+@Slf4j
 @RequiredArgsConstructor
 public class ConvertOrderToOrderAvailableService implements IConvertOrderService{
 
@@ -18,6 +20,7 @@ public class ConvertOrderToOrderAvailableService implements IConvertOrderService
     @Override
     public void convertAndSave(OrderAvailableDto order) {
         OrderAvailableEntity entity = mapper.toEntity(order);
+        log.info("Saving order {}",order.order().nameOrder());
         repository.save(entity);
     }
 }
