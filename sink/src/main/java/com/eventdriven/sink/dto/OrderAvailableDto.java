@@ -6,5 +6,5 @@ import jakarta.validation.constraints.NotNull;
 
 public record OrderAvailableDto(
         @Valid @NotNull OrderDto order,
-        @NotEmpty String avaiable){}
+        @NotEmpty String available){}
 
