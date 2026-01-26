@@ -1,11 +1,13 @@
 package com.eventdriven.sink.entity;
 
 import jakarta.persistence.*;
-import org.hibernate.annotations.CurrentTimestamp;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.math.BigDecimal;
-import java.sql.Timestamp;
+import java.time.Instant;
 
+@EntityListeners(AuditingEntityListener.class)
 @Table(name = "ORDER_AVAILABLE")
 @Entity
 public class OrderAvailableEntity {
@@ -15,6 +17,11 @@ public class OrderAvailableEntity {
         this.name = name;
         this.cost = cost;
         this.statusStock = statusStock;
+    }
+
+    protected OrderAvailableEntity()
+    {
+
     }
 
     @Id
@@ -28,7 +35,7 @@ public class OrderAvailableEntity {
     @Column(name = "STATUS_STOCK")
     private String statusStock;
 
-    @CurrentTimestamp
+    @CreatedDate
     @Column(name = "INSERT_ORDER")
-    private Timestamp insertOrder;
+    private Instant insertOrder;
 }

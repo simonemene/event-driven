@@ -26,25 +26,25 @@ public class SendMessageToKafkaScheduler {
 	public void pusblish()
 	{
 		List<MessageEntity> lastMessage =
-				respository.findTop10ByStatusByCreatedTimestampAsc(
-						List.of(StatusEnum.NEW.getValue(),
-								StatusEnum.FAILED.getValue()));
+				respository.findTop10ByStatusInOrderByCreateTimestampAsc(
+						List.of(StatusEnum.NEW,
+								StatusEnum.FAILED));
 
 		for(MessageEntity message : lastMessage)
 		{
 			try{
 				service.send(message);
-				message.setStatus(StatusEnum.SEND.getValue());
+				message.setStatus(StatusEnum.SEND);
 				message.setSendTimestamp(Instant.now());
 			}catch(Exception e)
 			{
 				message.setAttempts(message.getAttempts() + 1);
 				if(message.getAttempts()>3)
 				{
-					message.setStatus(StatusEnum.PARKING.getValue());
+					message.setStatus(StatusEnum.PARKING);
 				}else
 				{
-					message.setStatus(StatusEnum.FAILED.getValue());
+					message.setStatus(StatusEnum.FAILED);
 				}
 				log.error("Failed message {} ", message.getEventId(),e);
 			}

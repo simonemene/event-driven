@@ -1,11 +1,15 @@
 package com.eventdriven.source.entity;
 
+import com.eventdriven.source.enums.StatusEnum;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.Instant;
 
+@EntityListeners(AuditingEntityListener.class)
 @Setter
 @Getter
 @Entity
@@ -14,9 +18,8 @@ public class MessageEntity {
 
 	public MessageEntity(String eventId,
 			String topic,
-			String status,
+			StatusEnum status,
 			Instant sendTimestamp,
-			Instant createTimestamp,
 			int attempts,
 			String payload)
 	{
@@ -24,9 +27,13 @@ public class MessageEntity {
 		this.topic = topic;
 		this.status = status;
 		this.sendTimestamp = sendTimestamp;
-		this.createTimestamp = createTimestamp;
 		this.attempts = attempts;
 		this.payload = payload;
+	}
+
+	protected MessageEntity()
+	{
+
 	}
 
 	@Id
@@ -40,11 +47,13 @@ public class MessageEntity {
 	@Lob
 	private String payload;
 
-	private String status;
+	@Enumerated(EnumType.STRING)
+	private StatusEnum status;
 
 	@Column(name = "SEND_TIMESTAMP")
 	private Instant sendTimestamp;
 
+	@CreatedDate
 	@Column(name = "CREATE_TIMESTAMP")
 	private Instant createTimestamp;
 

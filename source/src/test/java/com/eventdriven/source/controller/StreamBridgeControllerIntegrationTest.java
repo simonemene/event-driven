@@ -13,10 +13,17 @@ import org.springframework.cloud.stream.binder.test.OutputDestination;
 import org.springframework.cloud.stream.binder.test.TestChannelBinderConfiguration;
 import org.springframework.context.annotation.Import;
 import org.springframework.messaging.Message;
+import org.springframework.test.context.TestPropertySource;
 
 import java.io.IOException;
 import java.math.BigDecimal;
 
+@TestPropertySource(
+        properties = {"spring.datasource.url=jdbc:h2:mem:dbtest",
+        "spring.datasource.name=user",
+        "spring.datasource.password="
+        }
+)
 @Import(TestChannelBinderConfiguration.class)
 public class StreamBridgeControllerIntegrationTest extends SourceApplicationTests {
 

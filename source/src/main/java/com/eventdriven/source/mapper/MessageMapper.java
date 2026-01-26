@@ -21,9 +21,8 @@ public class MessageMapper {
 		return new MessageEntity(
 				UUID.randomUUID().toString(),
 				cloudConfig.nameBridge(),
-				StatusEnum.NEW.getValue(),
+				StatusEnum.NEW,
 				null,
-				Instant.now(),
 				0,
 				dto.payload()
 		);
