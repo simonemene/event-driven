@@ -22,7 +22,7 @@ public class SendMessageToKafkaScheduler {
 	private final MessageRespository respository;
 
 
-	@Scheduled(fixedDelayString = "30000")
+	@Scheduled(fixedDelayString = "5000")
 	public void pusblish()
 	{
 		List<MessageEntity> lastMessage =

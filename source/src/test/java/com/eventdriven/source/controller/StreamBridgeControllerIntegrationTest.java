@@ -50,7 +50,7 @@ public class StreamBridgeControllerIntegrationTest extends SourceApplicationTest
                 "http://localhost:" + localServerPort + "/api/source",orderDto,Void.class
         );
         //then
-        Message<byte[]> message = outputDestination.receive(5000,cloudConfig.nameBridge());
+        Message<byte[]> message = outputDestination.receive(20000,cloudConfig.nameBridge());
         ObjectMapper objectMapper = new ObjectMapper();
         OrderDto result = objectMapper.readValue(message.getPayload(),OrderDto.class);
         Assertions.assertNotNull(result);

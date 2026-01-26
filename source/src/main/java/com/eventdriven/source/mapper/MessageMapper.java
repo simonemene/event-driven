@@ -7,7 +7,6 @@ import com.eventdriven.source.properties.CloudConfig;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
-import java.time.Instant;
 import java.util.UUID;
 
 @RequiredArgsConstructor
