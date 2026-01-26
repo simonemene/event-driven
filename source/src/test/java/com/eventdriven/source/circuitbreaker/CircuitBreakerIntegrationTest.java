@@ -53,9 +53,8 @@ public class CircuitBreakerIntegrationTest extends SourceApplicationTests {
 		OrderDto orderDto = new OrderDto("phone",new BigDecimal("10.21"));
 		ObjectMapper objectMapper = new ObjectMapper();
 		ObjectNode objectNode = objectMapper.createObjectNode();
-		ObjectNode root = objectNode.putObject("order");
-		root.put("name",orderDto.name());
-		root.put("cost",orderDto.cost());
+		objectNode.put("name",orderDto.name());
+		objectNode.put("cost",orderDto.cost());
 		String orderJson = objectMapper.writeValueAsString(objectNode);
 		//when
 		restTemplate.postForEntity("/api/source",orderDto,Void.class);
@@ -96,9 +95,8 @@ public class CircuitBreakerIntegrationTest extends SourceApplicationTests {
 		OrderDto orderDto = new OrderDto("phone",new BigDecimal("10.21"));
 		ObjectMapper objectMapper = new ObjectMapper();
 		ObjectNode objectNode = objectMapper.createObjectNode();
-		ObjectNode root = objectNode.putObject("order");
-		root.put("name",orderDto.name());
-		root.put("cost",orderDto.cost());
+		objectNode.put("name",orderDto.name());
+		objectNode.put("cost",orderDto.cost());
 		String orderJson = objectMapper.writeValueAsString(objectNode);
 		//1
 		//when

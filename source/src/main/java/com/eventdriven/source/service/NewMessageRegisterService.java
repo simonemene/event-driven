@@ -39,9 +39,8 @@ public class NewMessageRegisterService implements INewMessageArrivedService{
 
 	private String createPayload(OrderDto orderDto) throws JsonProcessingException {
 			ObjectNode node = objectMapper.createObjectNode();
-			ObjectNode objectNode = node.putObject("order");
-			objectNode.put("name", orderDto.nameOrder());
-			objectNode.put("cost", orderDto.costOrder());
+			node.put("name", orderDto.name());
+			node.put("cost", orderDto.cost());
 		return objectMapper.writeValueAsString(node);
 	}
 }
