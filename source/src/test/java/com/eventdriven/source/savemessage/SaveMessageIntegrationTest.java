@@ -5,11 +5,11 @@ import com.eventdriven.source.dto.OrderDto;
 import com.eventdriven.source.entity.MessageEntity;
 import com.eventdriven.source.enums.StatusEnum;
 import com.eventdriven.source.properties.CloudConfig;
-import com.eventdriven.source.repository.MessageRespository;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import org.assertj.core.api.Assertions;
+import org.awaitility.Awaitility;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
@@ -17,6 +17,7 @@ import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.kafka.test.context.EmbeddedKafka;
 
 import java.math.BigDecimal;
+import java.time.Duration;
 import java.time.Instant;
 import java.util.List;
 
@@ -57,6 +58,20 @@ public class SaveMessageIntegrationTest extends SourceApplicationTests
 		Assertions.assertThat(message1.getCreateTimestamp()).isBeforeOrEqualTo(Instant.now());
 		Assertions.assertThat(message1.getAttempts()).isEqualTo(0);
 
+		Awaitility.await().atMost(Duration.ofSeconds(5))
+				.pollInterval(Duration.ofMillis(100))
+				.untilAsserted(()->
+				{
+					List<MessageEntity> messageSend = messageRespository.findTop10ByStatusInOrderByCreateTimestampAsc(
+							List.of(StatusEnum.SEND));
+					Assertions.assertThat(messageSend.size()).isEqualTo(1);
+					MessageEntity messageSend1 = messageSend.stream().filter(mess->mess.getTopic().equals(config.nameBridge())).findFirst()
+							.get();
+					Assertions.assertThat(messageSend1.getPayload()).isEqualTo(orderJson);
+					Assertions.assertThat(messageSend1.getStatus()).isEqualTo(StatusEnum.SEND);
+					Assertions.assertThat(messageSend1.getCreateTimestamp()).isBeforeOrEqualTo(Instant.now());
+					Assertions.assertThat(messageSend1.getAttempts()).isEqualTo(0);
 
+				});
 	}
 }

@@ -3,7 +3,7 @@ package com.eventdriven.source.service;
 import com.eventdriven.source.dto.MessageEventDto;
 import com.eventdriven.source.dto.OrderDto;
 import com.eventdriven.source.mapper.MessageMapper;
-import com.eventdriven.source.repository.MessageRespository;
+import com.eventdriven.source.savemessage.MessageRespository;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;

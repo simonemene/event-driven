@@ -1,4 +1,4 @@
-package com.eventdriven.source.repository;
+package com.eventdriven.source.savemessage;
 
 import com.eventdriven.source.entity.MessageEntity;
 import com.eventdriven.source.enums.StatusEnum;

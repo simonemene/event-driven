@@ -2,7 +2,7 @@ package com.eventdriven.source.scheduler;
 
 import com.eventdriven.source.entity.MessageEntity;
 import com.eventdriven.source.enums.StatusEnum;
-import com.eventdriven.source.repository.MessageRespository;
+import com.eventdriven.source.savemessage.MessageRespository;
 import com.eventdriven.source.service.IBrokerService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
