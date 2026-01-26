@@ -1,7 +1,7 @@
-package com.eventdriven.source.stream;
+package com.eventdriven.source.controller;
 
-import com.eventdriven.source.configuration.StreamConfiguration;
 import com.eventdriven.source.dto.OrderDto;
+import com.eventdriven.source.service.INewMessageArrivedService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -21,7 +21,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class SourceController {
 
-    private final StreamConfiguration streamConfiguration;
+    private final INewMessageArrivedService service;
 
     @Operation(
             summary = "Send order to stream",
@@ -34,7 +34,7 @@ public class SourceController {
     @PostMapping
     public void sourceSend(@RequestBody @Valid OrderDto orderDto)
     {
-        streamConfiguration.sendOrder(orderDto);
+        service.newMessageArrived(orderDto);
     }
 
 

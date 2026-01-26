@@ -7,11 +7,8 @@ public class OrderMapper {
 
     public OrderAvailableEntity toEntity(OrderAvailableDto dto)
     {
-        return OrderAvailableEntity
-                .builder()
-                .cost(dto.order().costOrder())
-                .name(dto.order().nameOrder())
-                .statusStock(dto.avaiable())
-                .build();
+        return new OrderAvailableEntity(dto.order().nameOrder(),
+                dto.order().costOrder(),
+                dto.avaiable());
     }
 }

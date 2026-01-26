@@ -1,4 +1,4 @@
-package com.eventdriven.source.stream;
+package com.eventdriven.source.controller;
 
 import com.eventdriven.source.SourceApplicationTests;
 import com.eventdriven.source.dto.OrderDto;

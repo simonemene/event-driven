@@ -1,17 +1,21 @@
 package com.eventdriven.sink.entity;
 
 import jakarta.persistence.*;
-import lombok.Builder;
-import lombok.Getter;
+import org.hibernate.annotations.CurrentTimestamp;
 
 import java.math.BigDecimal;
 import java.sql.Timestamp;
 
-@Builder
-@Getter
 @Table(name = "ORDER_AVAILABLE")
 @Entity
 public class OrderAvailableEntity {
+
+    public OrderAvailableEntity(String name,BigDecimal cost, String statusStock)
+    {
+        this.name = name;
+        this.cost = cost;
+        this.statusStock = statusStock;
+    }
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -24,6 +28,7 @@ public class OrderAvailableEntity {
     @Column(name = "STATUS_STOCK")
     private String statusStock;
 
+    @CurrentTimestamp
     @Column(name = "INSERT_ORDER")
     private Timestamp insertOrder;
 }
