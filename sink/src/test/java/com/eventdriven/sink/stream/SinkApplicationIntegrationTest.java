@@ -47,7 +47,7 @@ public class SinkApplicationIntegrationTest extends SinkApplicationTests {
         String name = jdbcClient.sql("SELECT NAME FROM ORDER_AVAILABLE")
                         .query()
                         .singleValue().toString();
-        Assertions.assertEquals("phone",dto.order().nameOrder());
+        Assertions.assertEquals("phone",dto.order().name());
 
     }
 

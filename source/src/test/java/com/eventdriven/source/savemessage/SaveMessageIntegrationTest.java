@@ -42,8 +42,8 @@ public class SaveMessageIntegrationTest extends SourceApplicationTests
 		ObjectMapper objectMapper = new ObjectMapper();
 		ObjectNode objectNode = objectMapper.createObjectNode();
 		ObjectNode root = objectNode.putObject("order");
-		root.put("name",orderDto.nameOrder());
-		root.put("cost",orderDto.costOrder());
+		root.put("name",orderDto.name());
+		root.put("cost",orderDto.cost());
 		String orderJson = objectMapper.writeValueAsString(objectNode);
 		//when
 		restTemplate.postForEntity("/api/source",orderDto,Void.class);

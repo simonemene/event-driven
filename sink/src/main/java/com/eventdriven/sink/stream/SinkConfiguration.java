@@ -6,6 +6,8 @@ import com.eventdriven.sink.repository.OrderAvaiableRepository;
 import com.eventdriven.sink.service.ConvertOrderToOrderAvailableService;
 import com.eventdriven.sink.service.IConvertOrderService;
 import jakarta.validation.Valid;
+import jakarta.validation.Validation;
+import jakarta.validation.Validator;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -29,8 +31,16 @@ public class SinkConfiguration {
     @Bean
     public IConvertOrderService convertService(
             OrderMapper orderMapper,
-            OrderAvaiableRepository orderAvaiableRepository)
+            OrderAvaiableRepository orderAvaiableRepository,
+            Validator validator)
     {
-        return new ConvertOrderToOrderAvailableService(orderMapper,orderAvaiableRepository);
+        return new ConvertOrderToOrderAvailableService(orderMapper,orderAvaiableRepository,validator);
+    }
+
+
+    @Bean
+    public Validator validator()
+    {
+        return Validation.buildDefaultValidatorFactory().getValidator();
     }
 }

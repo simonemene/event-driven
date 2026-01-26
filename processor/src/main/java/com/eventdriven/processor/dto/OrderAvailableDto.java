@@ -1,4 +1,4 @@
 package com.eventdriven.processor.dto;
 
-public record OrderAvailableDto(OrderDto order, String avaiable){}
+public record OrderAvailableDto(OrderDto order, String available){}
 

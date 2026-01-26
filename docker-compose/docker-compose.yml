@@ -63,6 +63,8 @@ services:
       cub kafka-ready -b kafka:9092 1 30 &&
       kafka-topics --create --if-not-exists --bootstrap-server kafka:9092 --partitions 3 --replication-factor 1 --topic order-topic &&
       kafka-topics --create --if-not-exists --bootstrap-server kafka:9092 --partitions 3 --replication-factor 1 --topic stock-topic &&
+      kafka-topics --create --if-not-exists --bootstrap-server kafka:9092 --partitions 3 --replication-factor 1 --topic order-topic.dlq &&
+      kafka-topics --create --if-not-exists --bootstrap-server kafka:9092 --partitions 3 --replication-factor 1 --topic stock-topic.dlq &&
       kafka-topics --create --if-not-exists --bootstrap-server kafka:9092 --partitions 1 --replication-factor 1 --topic spring-cloud-bus &&
       echo 'Topics created'
       "
@@ -92,9 +94,12 @@ services:
     ports:
       - "8080:8080"
     environment:
-       SPRING_CLOUD_STREAM_KAFKA_BINDER_BROKERS: kafka:9092
+       SPRING_KAFKA_BOOTSTRAP_SERVERS: kafka:9092
        SPRING_CLOUD_STREAM_BINDINGS_ORDER_OUT_0_DESTINATION: order-topic
        SPRING_CONFIG_IMPORT: configserver:http://configserver:8081/
+       SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/appdb
+       SPRING_DATASOURCE_USERNAME: appuser
+       SPRING_DATASOURCE_PASSWORD: apppwd
     depends_on:
       configserver:
         condition: service_healthy
