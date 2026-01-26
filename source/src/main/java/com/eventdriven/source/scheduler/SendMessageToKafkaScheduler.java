@@ -22,8 +22,8 @@ public class SendMessageToKafkaScheduler {
 	private final MessageRespository respository;
 
 
-	@Scheduled(fixedDelayString = "5000")
-	public void pusblish()
+	@Scheduled(fixedDelayString = "${spring.scheduling.time}")
+	public void publish()
 	{
 		List<MessageEntity> lastMessage =
 				respository.findTop10ByStatusInOrderByCreateTimestampAsc(
