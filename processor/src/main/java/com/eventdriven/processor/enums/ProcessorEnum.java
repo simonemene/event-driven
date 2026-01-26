@@ -5,8 +5,8 @@ import lombok.Getter;
 @Getter
 public enum ProcessorEnum {
 
-    IN_STOCK("IN STOCK"),
-    OUT_STOCK("OUT STOCK");
+    IN_STOCK("IN_STOCK"),
+    OUT_STOCK("OUT_STOCK");
 
     private String value;
 

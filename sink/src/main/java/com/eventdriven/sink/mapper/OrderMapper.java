@@ -9,6 +9,6 @@ public class OrderMapper {
     {
         return new OrderAvailableEntity(dto.order().name(),
                 dto.order().cost(),
-                dto.avaiable());
+                dto.available());
     }
 }
