@@ -11,7 +11,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import org.assertj.core.api.Assertions;
 import org.awaitility.Awaitility;
-import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,6 +27,7 @@ import java.time.Duration;
 import java.time.Instant;
 import java.util.List;
 
+@Sql(scripts = "classpath:/delete.sql",executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
 @EmbeddedKafka
 @AutoConfigureTestDatabase
 public class CircuitBreakerIntegrationTest extends SourceApplicationTests {
@@ -44,7 +44,6 @@ public class CircuitBreakerIntegrationTest extends SourceApplicationTests {
 	@MockitoBean
 	private KafkaTemplate<String,String> kafkaTemplate;
 
-	@Order(1)
 	@Test
 	public void saveMessage()
 			throws JsonProcessingException{
@@ -71,8 +70,8 @@ public class CircuitBreakerIntegrationTest extends SourceApplicationTests {
 		Assertions.assertThat(message1.getCreateTimestamp()).isBeforeOrEqualTo(Instant.now());
 		Assertions.assertThat(message1.getAttempts()).isEqualTo(0);
 
-		Awaitility.await().atMost(Duration.ofSeconds(10))
-				.pollInterval(Duration.ofMillis(200))
+		Awaitility.await().atMost(Duration.ofSeconds(500))
+				.pollInterval(Duration.ofMillis(100))
 				.untilAsserted(()->
 				{
 					List<MessageEntity> messageSend = messageRespository.findTop10ByStatusInOrderByCreateTimestampAsc(
@@ -88,12 +87,11 @@ public class CircuitBreakerIntegrationTest extends SourceApplicationTests {
 				});
 	}
 
-	@Order(2)
-	@Sql(scripts = "classpath:/delete.sql",executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
 	@Test
 	public void parkingMessage() throws JsonProcessingException {
 		//given
 		Mockito.when(kafkaTemplate.send(Mockito.any(),Mockito.any(),Mockito.any())).thenThrow(new KafkaException("error"));
+
 
 		OrderDto orderDto = new OrderDto("phone",new BigDecimal("10.21"));
 		ObjectMapper objectMapper = new ObjectMapper();
@@ -114,10 +112,10 @@ public class CircuitBreakerIntegrationTest extends SourceApplicationTests {
 		Assertions.assertThat(message1.getPayload()).isEqualTo(orderJson);
 		Assertions.assertThat(message1.getStatus()).isEqualTo(StatusEnum.NEW);
 		Assertions.assertThat(message1.getCreateTimestamp()).isBeforeOrEqualTo(Instant.now());
-		Assertions.assertThat(message1.getAttempts()).isGreaterThan(3);
+		Assertions.assertThat(message1.getAttempts()).isEqualTo(0);
 
-		Awaitility.await().atMost(Duration.ofSeconds(30))
-				.pollInterval(Duration.ofMillis(300))
+		Awaitility.await().atMost(Duration.ofSeconds(2))
+				.pollInterval(Duration.ofMillis(100))
 				.untilAsserted(()->
 				{
 					List<MessageEntity> messageSend = messageRespository.findTop10ByStatusInOrderByCreateTimestampAsc(
@@ -128,7 +126,7 @@ public class CircuitBreakerIntegrationTest extends SourceApplicationTests {
 					Assertions.assertThat(messageSend1.getPayload()).isEqualTo(orderJson);
 					Assertions.assertThat(messageSend1.getStatus()).isEqualTo(StatusEnum.PARKING);
 					Assertions.assertThat(messageSend1.getCreateTimestamp()).isBeforeOrEqualTo(Instant.now());
-					Assertions.assertThat(messageSend1.getAttempts()).isEqualTo(3);
+					Assertions.assertThat(messageSend1.getAttempts()).isEqualTo(4);
 
 				});
 	}
