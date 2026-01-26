@@ -11,6 +11,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import org.assertj.core.api.Assertions;
 import org.awaitility.Awaitility;
+import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,6 +21,7 @@ import org.springframework.kafka.KafkaException;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.kafka.test.context.EmbeddedKafka;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
+import org.springframework.test.context.jdbc.Sql;
 
 import java.math.BigDecimal;
 import java.time.Duration;
@@ -42,6 +44,7 @@ public class CircuitBreakerIntegrationTest extends SourceApplicationTests {
 	@MockitoBean
 	private KafkaTemplate<String,String> kafkaTemplate;
 
+	@Order(1)
 	@Test
 	public void saveMessage()
 			throws JsonProcessingException{
@@ -81,6 +84,51 @@ public class CircuitBreakerIntegrationTest extends SourceApplicationTests {
 					Assertions.assertThat(messageSend1.getStatus()).isEqualTo(StatusEnum.FAILED);
 					Assertions.assertThat(messageSend1.getCreateTimestamp()).isBeforeOrEqualTo(Instant.now());
 					Assertions.assertThat(messageSend1.getAttempts()).isGreaterThan(0);
+
+				});
+	}
+
+	@Order(2)
+	@Sql(scripts = "classpath:/delete.sql",executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
+	@Test
+	public void parkingMessage() throws JsonProcessingException {
+		//given
+		Mockito.when(kafkaTemplate.send(Mockito.any(),Mockito.any(),Mockito.any())).thenThrow(new KafkaException("error"));
+
+		OrderDto orderDto = new OrderDto("phone",new BigDecimal("10.21"));
+		ObjectMapper objectMapper = new ObjectMapper();
+		ObjectNode objectNode = objectMapper.createObjectNode();
+		ObjectNode root = objectNode.putObject("order");
+		root.put("name",orderDto.nameOrder());
+		root.put("cost",orderDto.costOrder());
+		String orderJson = objectMapper.writeValueAsString(objectNode);
+		//1
+		//when
+		restTemplate.postForEntity("/api/source",orderDto,Void.class);
+		//then
+		List<MessageEntity> message = messageRespository.findTop10ByStatusInOrderByCreateTimestampAsc(
+				List.of(StatusEnum.NEW));
+		Assertions.assertThat(message.size()).isEqualTo(1);
+		MessageEntity message1 = message.stream().filter(mess->mess.getTopic().equals(config.nameBridge())).findFirst()
+				.get();
+		Assertions.assertThat(message1.getPayload()).isEqualTo(orderJson);
+		Assertions.assertThat(message1.getStatus()).isEqualTo(StatusEnum.NEW);
+		Assertions.assertThat(message1.getCreateTimestamp()).isBeforeOrEqualTo(Instant.now());
+		Assertions.assertThat(message1.getAttempts()).isGreaterThan(3);
+
+		Awaitility.await().atMost(Duration.ofSeconds(30))
+				.pollInterval(Duration.ofMillis(300))
+				.untilAsserted(()->
+				{
+					List<MessageEntity> messageSend = messageRespository.findTop10ByStatusInOrderByCreateTimestampAsc(
+							List.of(StatusEnum.PARKING));
+					Assertions.assertThat(messageSend.size()).isEqualTo(1);
+					MessageEntity messageSend1 = messageSend.stream().filter(mess->mess.getTopic().equals(config.nameBridge())).findFirst()
+							.get();
+					Assertions.assertThat(messageSend1.getPayload()).isEqualTo(orderJson);
+					Assertions.assertThat(messageSend1.getStatus()).isEqualTo(StatusEnum.PARKING);
+					Assertions.assertThat(messageSend1.getCreateTimestamp()).isBeforeOrEqualTo(Instant.now());
+					Assertions.assertThat(messageSend1.getAttempts()).isEqualTo(3);
 
 				});
 	}
