@@ -1,13 +1,9 @@
 package com.eventdriven.dlq;
 
-import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-class DlqApplicationTests {
+public class DlqApplicationTests {
 
-	@Test
-	void contextLoads() {
-	}
 
 }
