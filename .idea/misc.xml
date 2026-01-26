@@ -8,6 +8,10 @@
         <option value="$PROJECT_DIR$/source/pom.xml" />
         <option value="$PROJECT_DIR$/processor/pom.xml" />
         <option value="$PROJECT_DIR$/configserver/pom.xml" />
+        <option value="$PROJECT_DIR$/testcontainer/testcontainer/pom.xml" />
+        <option value="$PROJECT_DIR$/dlq/dlq/pom.xml" />
+        <option value="$PROJECT_DIR$/testcontainer/pom.xml" />
+        <option value="$PROJECT_DIR$/dlq/pom.xml" />
       </list>
     </option>
   </component>
