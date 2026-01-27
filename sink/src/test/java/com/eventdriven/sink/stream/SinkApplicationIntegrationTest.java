@@ -37,7 +37,7 @@ public class SinkApplicationIntegrationTest extends SinkApplicationTests {
     {
         //given
         OrderDto order =
-                new OrderDto("phone",new BigDecimal("12.12"));
+                new OrderDto("12a","phone",new BigDecimal("12.12"));
         OrderAvailableDto dto =
                 new OrderAvailableDto(order,"IN_STOCK");
         //when
@@ -48,6 +48,7 @@ public class SinkApplicationIntegrationTest extends SinkApplicationTests {
                         .query()
                         .singleValue().toString();
         Assertions.assertEquals("phone",dto.order().name());
+        Assertions.assertEquals("12a",dto.order().id());
 
     }
 

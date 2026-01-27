@@ -53,7 +53,7 @@ public class ProcessorApplicationintegrationTest extends ProcessorApplicationTes
     public void processor() throws IOException {
         //given
         Mockito.when(service.isAvaiable()).thenReturn(ProcessorEnum.IN_STOCK.getValue());
-        OrderDto orderDto = new OrderDto("apple",new BigDecimal("10.2"));
+        OrderDto orderDto = new OrderDto("12a","apple",new BigDecimal("10.2"));
         OrderAvailableDto check = new OrderAvailableDto(orderDto,ProcessorEnum.IN_STOCK.getValue());
         Message<OrderDto> messageInput = MessageBuilder.withPayload(orderDto).build();
         //when

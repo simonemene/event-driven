@@ -38,4 +38,7 @@ public class OrderAvailableEntity {
     @CreatedDate
     @Column(name = "INSERT_ORDER")
     private Instant insertOrder;
+
+    @Column(name = "ID_EVENT")
+    String idEvent;
 }
