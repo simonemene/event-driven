@@ -1,9 +1,7 @@
 package com.eventdriven.dlq.service;
 
-import com.eventdriven.dlq.dto.OrderAvailableDto;
 import com.eventdriven.dlq.dto.OrderDto;
 import com.eventdriven.dlq.entity.OrderDlqEntity;
-import com.eventdriven.dlq.entity.OrderStockDlqEntity;
 import com.eventdriven.dlq.mapper.OrderDlqMapper;
 import com.eventdriven.dlq.repository.OrderDlqRepository;
 import lombok.RequiredArgsConstructor;
