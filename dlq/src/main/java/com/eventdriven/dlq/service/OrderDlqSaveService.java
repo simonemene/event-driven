@@ -7,14 +7,21 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Slf4j
 @RequiredArgsConstructor
 @Service
-public class OrderDlqSaveService implements IOrderDlqSaveService{
+public class OrderDlqSaveService implements IOrderSupportQueryService<OrderDto>{
 
 	private final OrderDlqRepository repository;
 
 	private final OrderDlqMapper orderDlqMapper;
+
+	@Override
+	public List<OrderDto> getElmentDlq() {
+		return List.of();
+	}
 
 	@Override
 	public void saveMessage(OrderDto message) {

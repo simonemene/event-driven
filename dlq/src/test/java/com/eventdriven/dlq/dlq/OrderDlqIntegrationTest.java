@@ -32,8 +32,7 @@ import java.math.BigDecimal;
 				"spring.config.import="
 		})
 @AutoConfigureTestDatabase
-@Import({TestChannelBinderConfiguration.class, OrderDlqConfiguration.class,
-		OrderDlqSaveService.class, OrderDlqMapper.class })
+@Import({TestChannelBinderConfiguration.class, OrderDlqConfiguration.class})
 public class OrderDlqIntegrationTest {
 
 	@Autowired
@@ -62,7 +61,11 @@ public class OrderDlqIntegrationTest {
 
 	@EnableJpaRepositories(basePackages = "com.eventdriven.dlq.repository")
 	@EntityScan(basePackages ="com.eventdriven.dlq.entity" )
-	@SpringBootApplication
+	@SpringBootApplication(scanBasePackageClasses =
+			{
+					OrderDlqSaveService.class,
+					OrderDlqMapper.class
+			})
 	public static class main
 	{
 

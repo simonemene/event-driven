@@ -1,20 +1,28 @@
 package com.eventdriven.dlq.service;
 
 import com.eventdriven.dlq.dto.OrderAvailableDto;
+import com.eventdriven.dlq.entity.OrderStockDlqEntity;
 import com.eventdriven.dlq.mapper.OrderStockDlqMapper;
 import com.eventdriven.dlq.repository.OrderStockDlqRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Slf4j
 @RequiredArgsConstructor
 @Service
-public class OrderStockDlqSaveService implements IOrderStockDlqSaveService{
+public class OrderStockDlqSaveService implements IOrderSupportQueryService<OrderAvailableDto>{
 
 	private final OrderStockDlqRepository repository;
 
 	private final OrderStockDlqMapper mapper;
+
+	@Override
+	public List<OrderAvailableDto> getElmentDlq() {
+		return List.of();
+	}
 
 	@Override
 	public void saveMessage(OrderAvailableDto message) {

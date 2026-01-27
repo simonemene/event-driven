@@ -29,10 +29,8 @@ import java.math.BigDecimal;
 				"spring.config.import="
 		})
 @AutoConfigureTestDatabase
-@Import({ TestChannelBinderConfiguration.class, OrderStockConfiguration.class,
-		OrderStockDlqSaveService.class, OrderStockDlqMapper.class })
+@Import({ TestChannelBinderConfiguration.class, OrderStockConfiguration.class })
 public class OrderStockDlqIntegrationTest {
-
 
 	@Autowired
 	private JdbcClient jdbcClient;
@@ -62,7 +60,11 @@ public class OrderStockDlqIntegrationTest {
 
 	@EnableJpaRepositories(basePackages = "com.eventdriven.dlq.repository")
 	@EntityScan(basePackages ="com.eventdriven.dlq.entity" )
-	@SpringBootApplication
+	@SpringBootApplication(scanBasePackageClasses =
+			{
+					OrderStockDlqSaveService.class,
+	                OrderStockDlqMapper.class
+			})
 	public static class main
 	{
 
