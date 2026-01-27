@@ -8,4 +8,6 @@ import java.util.List;
 public interface OrderDlqRepository extends JpaRepository<OrderDlqEntity,Long> {
 
 	List<OrderDlqEntity> findByNotificationFalse();
+
+	OrderDlqEntity findByIdEvent(String idEvento);
 }

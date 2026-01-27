@@ -35,6 +35,9 @@ public class OrderStockDlqEntity {
 
 	private boolean notification;
 
+	@Column(name = "ID_EVENT")
+	String idEvent;
+
 
 
 

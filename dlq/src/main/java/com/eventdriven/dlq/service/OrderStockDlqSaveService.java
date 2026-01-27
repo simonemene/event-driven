@@ -1,6 +1,7 @@
 package com.eventdriven.dlq.service;
 
 import com.eventdriven.dlq.dto.OrderAvailableDto;
+import com.eventdriven.dlq.entity.OrderDlqEntity;
 import com.eventdriven.dlq.entity.OrderStockDlqEntity;
 import com.eventdriven.dlq.mapper.OrderStockDlqMapper;
 import com.eventdriven.dlq.repository.OrderStockDlqRepository;
@@ -32,7 +33,7 @@ public class OrderStockDlqSaveService implements IOrderSupportQueryService<Order
 
 	@Override
 	public void notification(OrderAvailableDto element) {
-		OrderStockDlqEntity order = mapper.toEntity(element);
+		OrderStockDlqEntity order = repository.findByIdEvent(element.order().id());
 		repository.save(new OrderStockDlqEntity
 				(order.getName(),order.getCost(),order.getAvailable(),true));
 	}

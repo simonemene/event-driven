@@ -43,7 +43,7 @@ public class OrderStockDlqIntegrationTest {
 	{
 		//given
 		OrderDto order =
-				new OrderDto("phone",new BigDecimal("12.12"));
+				new OrderDto("12a","phone",new BigDecimal("12.12"));
 		OrderAvailableDto availableDto =
 				new OrderAvailableDto(order,"IN_STOCK");
 		//when
@@ -55,6 +55,7 @@ public class OrderStockDlqIntegrationTest {
 				.singleValue()
 				.toString();
 		Assertions.assertEquals("phone",order.nameOrder());
+		Assertions.assertEquals("12a",order.id());
 
 	}
 

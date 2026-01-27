@@ -46,7 +46,7 @@ public class OrderDlqIntegrationTest {
 	{
 		//given
 		OrderDto order =
-				new OrderDto("phone",new BigDecimal("12.12"));
+				new OrderDto("12a","phone",new BigDecimal("12.12"));
 		//when
 		inputDestination.send(MessageBuilder.withPayload(order).build(),
 				"order-topic.dlq");
@@ -56,6 +56,7 @@ public class OrderDlqIntegrationTest {
 				.singleValue()
 				.toString();
 		Assertions.assertEquals("phone",order.nameOrder());
+		Assertions.assertEquals("12a",order.id());
 
 	}
 

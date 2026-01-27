@@ -18,7 +18,9 @@ public class OrderStockDlqMapper {
 	}
 	public OrderAvailableDto toDto(OrderStockDlqEntity orderDlqEntity)
 	{
-		return new OrderAvailableDto(new OrderDto(orderDlqEntity.getName(),orderDlqEntity.getCost()),
+		return new OrderAvailableDto(new OrderDto(orderDlqEntity.getIdEvent(),
+				orderDlqEntity.getName(),
+				orderDlqEntity.getCost()),
 				orderDlqEntity.getAvailable());
 	}
 

@@ -31,4 +31,7 @@ public class OrderDlqEntity {
 	private BigDecimal cost;
 
 	private boolean notification;
+
+	@Column(name = "ID_EVENT")
+	String idEvent;
 }
