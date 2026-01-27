@@ -35,7 +35,7 @@ public class OrderDlqSaveService implements IOrderSupportQueryService<OrderDto>{
 	@Override
 	public void notification(OrderDto element) {
 		OrderDlqEntity order = repository.findByIdEvent(element.id());
-		repository.save(
-				new OrderDlqEntity(order.getName(),order.getCost(),true));
+		order.setNotification(true);
+		repository.save(order);
 	}
 }
