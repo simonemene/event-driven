@@ -12,7 +12,7 @@ public class OrderStockDlqMapper {
 
 	public OrderStockDlqEntity toEntity(OrderAvailableDto orderDto)
 	{
-		return new OrderStockDlqEntity(
+		return new OrderStockDlqEntity(orderDto.order().id(),
 				orderDto.order().nameOrder(),orderDto.order().costOrder(),orderDto.avaiable(),orderDto.notification()
 		);
 	}

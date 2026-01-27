@@ -22,7 +22,7 @@ public class AlarmOrderDlqMessageScheduled implements IAlarmScheduled{
 		List<OrderDto> listAlarmOrder = service.getElmentDlq();
 		for(OrderDto order : listAlarmOrder)
 		{
-			log.info("[ORDER] ALARM: {}", order.nameOrder());
+			log.info("[ORDER] ALARM: {}", order.id());
 			service.notification(order);
 		}
 	}

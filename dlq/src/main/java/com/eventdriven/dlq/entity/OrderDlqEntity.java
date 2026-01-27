@@ -17,8 +17,9 @@ public class OrderDlqEntity {
 
 	}
 
-	public OrderDlqEntity(String name,BigDecimal cost,boolean notification)
+	public OrderDlqEntity(String idEvent,String name,BigDecimal cost,boolean notification)
 	{
+		this.idEvent = idEvent;
 		this.name = name;
 		this.cost = cost;
 		this.notification = notification;

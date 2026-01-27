@@ -17,12 +17,13 @@ public class OrderStockDlqEntity {
 
 	}
 
-	public OrderStockDlqEntity(String name,BigDecimal cost,String available,boolean notification)
+	public OrderStockDlqEntity(String idEvent,String name,BigDecimal cost,String available,boolean notification)
 	{
 		this.name = name;
 		this.cost = cost;
 		this.available = available;
 		this.notification = notification;
+		this.idEvent = idEvent;
 	}
 
 	@Id
