@@ -11,7 +11,8 @@ public class OrderDlqMapper {
 
 	public OrderDlqEntity toEntity(OrderDto orderDto)
 	{
-		return new OrderDlqEntity(orderDto.nameOrder(),orderDto.costOrder());
+		return new OrderDlqEntity(orderDto.nameOrder(),orderDto.costOrder(),
+				orderDto.notification());
 	}
 
 	public OrderDto toDto(OrderDlqEntity orderDlqEntity)

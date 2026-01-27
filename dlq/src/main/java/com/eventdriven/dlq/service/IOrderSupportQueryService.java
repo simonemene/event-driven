@@ -7,4 +7,6 @@ public interface IOrderSupportQueryService<T> {
 	List<T> getElmentDlq();
 
 	void saveMessage(T element);
+
+	void notification(T element);
 }

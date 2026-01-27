@@ -21,14 +21,19 @@ public class OrderStockDlqSaveService implements IOrderSupportQueryService<Order
 
 	@Override
 	public List<OrderAvailableDto> getElmentDlq() {
-		return List.of();
+		return mapper.toListDto(repository.findByNotificationFalse());
 	}
 
 	@Override
 	public void saveMessage(OrderAvailableDto message) {
 		log.info("Save message {} ", message.order().nameOrder());
 		repository.save(mapper.toEntity(message));
+	}
 
-
+	@Override
+	public void notification(OrderAvailableDto element) {
+		OrderStockDlqEntity order = mapper.toEntity(element);
+		repository.save(new OrderStockDlqEntity
+				(order.getName(),order.getCost(),order.getAvailable(),true));
 	}
 }

@@ -15,10 +15,11 @@ public class OrderDlqEntity {
 
 	}
 
-	public OrderDlqEntity(String name,BigDecimal cost)
+	public OrderDlqEntity(String name,BigDecimal cost,boolean notification)
 	{
 		this.name = name;
 		this.cost = cost;
+		this.notification = notification;
 	}
 
 	@Id
@@ -28,4 +29,6 @@ public class OrderDlqEntity {
 	private String name;
 
 	private BigDecimal cost;
+
+	private boolean notification;
 }

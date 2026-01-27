@@ -23,6 +23,7 @@ public class AlarmOrderDlqMessageScheduled implements IAlarmScheduled{
 		for(OrderDto order : listAlarmOrder)
 		{
 			log.info("[ORDER] ALARM: {}", order.nameOrder());
+			service.notification(order);
 		}
 	}
 }

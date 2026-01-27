@@ -24,6 +24,7 @@ public class AlarmOrderStockDlqMessageScheduled implements IAlarmScheduled{
 		for(OrderAvailableDto order : listAlarmOrder)
 		{
 			log.info("[ORDER IN STOCK] ALARM: {}", order.order().nameOrder());
+			service.notification(order);
 		}
 	}
 }

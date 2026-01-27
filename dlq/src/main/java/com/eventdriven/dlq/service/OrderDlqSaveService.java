@@ -1,6 +1,9 @@
 package com.eventdriven.dlq.service;
 
+import com.eventdriven.dlq.dto.OrderAvailableDto;
 import com.eventdriven.dlq.dto.OrderDto;
+import com.eventdriven.dlq.entity.OrderDlqEntity;
+import com.eventdriven.dlq.entity.OrderStockDlqEntity;
 import com.eventdriven.dlq.mapper.OrderDlqMapper;
 import com.eventdriven.dlq.repository.OrderDlqRepository;
 import lombok.RequiredArgsConstructor;
@@ -16,16 +19,23 @@ public class OrderDlqSaveService implements IOrderSupportQueryService<OrderDto>{
 
 	private final OrderDlqRepository repository;
 
-	private final OrderDlqMapper orderDlqMapper;
+	private final OrderDlqMapper mapper;
 
 	@Override
 	public List<OrderDto> getElmentDlq() {
-		return orderDlqMapper.toListDto(repository.findAll());
+		return mapper.toListDto(repository.findByNotificationFalse());
 	}
 
 	@Override
 	public void saveMessage(OrderDto message) {
 		log.info("Save message {} ", message.nameOrder());
-		repository.save(orderDlqMapper.toEntity(message));
+		repository.save(mapper.toEntity(message));
+	}
+
+	@Override
+	public void notification(OrderDto element) {
+		OrderDlqEntity order = mapper.toEntity(element);
+		repository.save(
+				new OrderDlqEntity(order.getName(),order.getCost(),true));
 	}
 }
