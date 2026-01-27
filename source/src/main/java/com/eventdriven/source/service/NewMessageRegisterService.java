@@ -2,6 +2,7 @@ package com.eventdriven.source.service;
 
 import com.eventdriven.source.dto.MessageEventDto;
 import com.eventdriven.source.dto.OrderDto;
+import com.eventdriven.source.entity.MessageEntity;
 import com.eventdriven.source.mapper.MessageMapper;
 import com.eventdriven.source.savemessage.MessageRespository;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -11,6 +12,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.UUID;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -28,17 +31,19 @@ public class NewMessageRegisterService implements INewMessageArrivedService{
 	@Override
 	public void newMessageArrived(OrderDto order) {
 		try {
+			String event = UUID.randomUUID().toString();
 			repository.save(
-					mapper.toDto(new MessageEventDto("", "",
-							createPayload(order))));
+					mapper.toDto(new MessageEventDto("", event,
+							createPayload(order,event))));
 		}catch(Exception e)
 		{
 			log.error("JSON serialization failed",e);
 		}
 	}
 
-	private String createPayload(OrderDto orderDto) throws JsonProcessingException {
+	private String createPayload(OrderDto orderDto,String event) throws JsonProcessingException {
 			ObjectNode node = objectMapper.createObjectNode();
+			node.put("id",event);
 			node.put("name", orderDto.name());
 			node.put("cost", orderDto.cost());
 		return objectMapper.writeValueAsString(node);

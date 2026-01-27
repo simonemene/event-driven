@@ -7,8 +7,6 @@ import com.eventdriven.source.properties.CloudConfig;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
-import java.util.UUID;
-
 @RequiredArgsConstructor
 @Component
 public class MessageMapper {
@@ -18,7 +16,7 @@ public class MessageMapper {
 	public MessageEntity toDto(MessageEventDto dto)
 	{
 		return new MessageEntity(
-				UUID.randomUUID().toString(),
+				dto.eventId(),
 				cloudConfig.nameBridge(),
 				StatusEnum.NEW,
 				null,

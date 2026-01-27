@@ -6,6 +6,7 @@ import com.eventdriven.source.entity.MessageEntity;
 import com.eventdriven.source.enums.StatusEnum;
 import com.eventdriven.source.properties.CloudConfig;
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import org.assertj.core.api.Assertions;
@@ -20,6 +21,7 @@ import java.math.BigDecimal;
 import java.time.Duration;
 import java.time.Instant;
 import java.util.List;
+import java.util.UUID;
 
 @EmbeddedKafka
 @AutoConfigureTestDatabase
@@ -52,7 +54,10 @@ public class SaveMessageIntegrationTest extends SourceApplicationTests
 		Assertions.assertThat(message.size()).isEqualTo(1);
 		MessageEntity message1 = message.stream().filter(mess->mess.getTopic().equals(config.nameBridge())).findFirst()
 				.get();
-		Assertions.assertThat(message1.getPayload()).isEqualTo(orderJson);
+		JsonNode json = objectMapper.readTree(message1.getPayload());
+		JsonNode jsonCheck = objectMapper.readTree(orderJson);
+		Assertions.assertThat(json.get("cost")).isEqualTo(jsonCheck.get("cost"));
+		Assertions.assertThat(json.get("name")).isEqualTo(jsonCheck.get("name"));
 		Assertions.assertThat(message1.getStatus()).isEqualTo(StatusEnum.NEW);
 		Assertions.assertThat(message1.getCreateTimestamp()).isBeforeOrEqualTo(Instant.now());
 		Assertions.assertThat(message1.getAttempts()).isEqualTo(0);
@@ -66,7 +71,9 @@ public class SaveMessageIntegrationTest extends SourceApplicationTests
 					Assertions.assertThat(messageSend.size()).isEqualTo(1);
 					MessageEntity messageSend1 = messageSend.stream().filter(mess->mess.getTopic().equals(config.nameBridge())).findFirst()
 							.get();
-					Assertions.assertThat(messageSend1.getPayload()).isEqualTo(orderJson);
+					JsonNode saveJson = objectMapper.readTree(messageSend1.getPayload());
+					Assertions.assertThat(saveJson.hasNonNull("id")).isTrue();
+					Assertions.assertThatCode(()-> UUID.fromString(saveJson.get("id").asText())).doesNotThrowAnyException();
 					Assertions.assertThat(messageSend1.getStatus()).isEqualTo(StatusEnum.SEND);
 					Assertions.assertThat(messageSend1.getCreateTimestamp()).isBeforeOrEqualTo(Instant.now());
 					Assertions.assertThat(messageSend1.getAttempts()).isEqualTo(0);
