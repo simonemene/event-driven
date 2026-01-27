@@ -6,7 +6,7 @@ import java.math.BigDecimal;
 
 
 @Entity
-@Table(name = "ORDER_STOCK_SLQ")
+@Table(name = "ORDER_STOCK_DLQ")
 public class OrderStockDlqEntity {
 
 	protected OrderStockDlqEntity()
