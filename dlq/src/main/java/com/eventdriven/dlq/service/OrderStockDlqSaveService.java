@@ -18,7 +18,7 @@ public class OrderStockDlqSaveService implements IOrderStockDlqSaveService{
 
 	@Override
 	public void saveMessage(OrderAvailableDto message) {
-		log.info("Save message {}: ", message.order().nameOrder());
+		log.info("Save message {} ", message.order().nameOrder());
 		repository.save(mapper.toEntity(message));
 
 
