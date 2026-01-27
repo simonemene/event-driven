@@ -147,6 +147,27 @@ services:
       file: common-config.yml
       service: common-network
 
+  dlqservice:
+    image: "dlq:s1"
+    container_name: dlq
+    environment:
+      SPRING_CLOUD_STREAM_KAFKA_BINDER_BROKERS: kafka:9092
+      SPRING_CLOUD_STREAM_BINDINGS_DLQSTOCKORDER_IN_0_DESTINATION: stock-topic.dlq
+      SPRING_CLOUD_STREAM_BINDINGS_DLQORDER_IN_0_DESTINATION: order-topic.dlq
+      SPRING_CLOUD_STREAM_BINDINGS_DLQSTOCKORDER_IN_0_GROUP: stock-topic.dlq
+      SPRING_CLOUD_STREAM_BINDINGS_DLQORDER_IN_0_GROUP: order-topic.dlq
+      SPRING_CONFIG_IMPORT: configserver:http://configserver:8081/
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/appdb
+      SPRING_DATASOURCE_USERNAME: appuser
+      SPRING_DATASOURCE_PASSWORD: apppwd
+    depends_on:
+      configserver:
+        condition: service_healthy
+      mysql:
+        condition: service_healthy
+    extends:
+      file: common-config.yml
+      service: common-network
 
 
 
