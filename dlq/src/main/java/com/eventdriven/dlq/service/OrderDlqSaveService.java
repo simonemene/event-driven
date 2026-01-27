@@ -20,7 +20,7 @@ public class OrderDlqSaveService implements IOrderSupportQueryService<OrderDto>{
 
 	@Override
 	public List<OrderDto> getElmentDlq() {
-		return List.of();
+		return orderDlqMapper.toListDto(repository.findAll());
 	}
 
 	@Override

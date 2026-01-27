@@ -1,9 +1,11 @@
 package com.eventdriven.dlq.entity;
 
 import jakarta.persistence.*;
+import lombok.Getter;
 
 import java.math.BigDecimal;
 
+@Getter
 @Table(name = "ORDER_DLQ")
 @Entity
 public class OrderDlqEntity {
