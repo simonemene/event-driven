@@ -7,7 +7,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class OrderStockDlqMapper {
 
-	OrderStockDlqEntity toEntity(OrderAvailableDto orderDto)
+	public OrderStockDlqEntity toEntity(OrderAvailableDto orderDto)
 	{
 		return new OrderStockDlqEntity(orderDto.order().nameOrder(),orderDto.order().costOrder(),orderDto.avaiable());
 	}

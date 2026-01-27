@@ -1,23 +1,18 @@
 package com.eventdriven.dlq.configuration;
 
-import com.eventdriven.dlq.dto.OrderAvailableDto;
 import com.eventdriven.dlq.dto.OrderDto;
+import com.eventdriven.dlq.service.IOrderDlqSaveService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 import java.util.function.Consumer;
 
 @Configuration
-public class DlqConfiguration {
+public class OrderDlqConfiguration {
 
 	@Bean
-	public Consumer<OrderDto> dqlOrder(OrderDto order)
+	public Consumer<OrderDto> dqlOrder(IOrderDlqSaveService service)
 	{
-		return null;
-	}
-
-	@Bean Consumer<OrderAvailableDto> dlqStockOrder(OrderAvailableDto orderAvailable)
-	{
-		return null;
+		return service::saveMessage;
 	}
 }

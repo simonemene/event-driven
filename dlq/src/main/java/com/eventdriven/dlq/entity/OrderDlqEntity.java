@@ -2,6 +2,8 @@ package com.eventdriven.dlq.entity;
 
 import jakarta.persistence.*;
 
+import java.math.BigDecimal;
+
 @Table(name = "ORDER_DLQ")
 @Entity
 public class OrderDlqEntity {
@@ -11,7 +13,7 @@ public class OrderDlqEntity {
 
 	}
 
-	public OrderDlqEntity(String name,String cost)
+	public OrderDlqEntity(String name,BigDecimal cost)
 	{
 		this.name = name;
 		this.cost = cost;
@@ -23,5 +25,5 @@ public class OrderDlqEntity {
 
 	private String name;
 
-	private String cost;
+	private BigDecimal cost;
 }
