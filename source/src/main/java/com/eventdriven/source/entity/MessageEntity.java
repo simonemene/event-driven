@@ -43,6 +43,7 @@ public class MessageEntity {
 	@Version
 	private Long version;
 
+	@Column(name = "ID_EVENT")
 	private String eventId;
 
 	private String topic;
