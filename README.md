@@ -156,7 +156,6 @@ Protects the Source application from wasting resources when Kafka is unavailable
 ##  How to Run the Project
 
 ### 1. Clone the repository
-```bash
 git clone <REPO_URL>
 
 ### 2. Start infrastructure
