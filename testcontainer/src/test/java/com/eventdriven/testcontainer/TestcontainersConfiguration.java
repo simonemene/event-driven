@@ -35,10 +35,36 @@ class TestcontainersConfiguration {
 	}
 
 	@Bean
-
 	NewTopic orderTopic()
 	{
 		return TopicBuilder.name("order-topic")
+				.partitions(1)
+				.replicas(1)
+				.build();
+	}
+
+	@Bean
+	NewTopic stockTopic()
+	{
+		return TopicBuilder.name("stock-topic")
+				.partitions(1)
+				.replicas(1)
+				.build();
+	}
+
+	@Bean
+	NewTopic dlqOrderTopic()
+	{
+		return TopicBuilder.name("order-topic.dlq")
+				.partitions(1)
+				.replicas(1)
+				.build();
+	}
+
+	@Bean
+	NewTopic dlqStockTopic()
+	{
+		return TopicBuilder.name("stock-topic.dlq")
 				.partitions(1)
 				.replicas(1)
 				.build();
