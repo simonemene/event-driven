@@ -181,3 +181,10 @@ show databases;
 use appdb;
 show tables;
 
+ Final Notes
+
+This project is not a toy example.
+It demonstrates real architectural decisions required to build production-grade event-driven systems.
+
+The focus is not on frameworks, but on correct responsibilities, failure handling, and resilience.
+
