@@ -158,3 +158,26 @@ Protects the Source application from wasting resources when Kafka is unavailable
 ### 1. Clone the repository
 ```bash
 git clone <REPO_URL>
+
+### 2. Start infrastructure
+docker-compose up -d
+
+### 3. Send an order
+POST /api/source
+{
+  "name": "phone",
+  "cost": 12.5
+}
+
+### 4. Inspect Kafka topics
+docker exec -it kafka bash
+kafka-console-consumer --bootstrap-server kafka:9092 --topic order-topic --from-beginning
+
+
+### 5. Inspect MySQL
+docker exec -it mysql bash
+mysql -uroot -proot
+show databases;
+use appdb;
+show tables;
+
