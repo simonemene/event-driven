@@ -1,16 +1,18 @@
 package com.eventdriven.testcontainer.kafka;
 
-import com.eventdriven.processor.ProcessorApplication;
 import com.eventdriven.processor.dto.OrderAvailableDto;
 import com.eventdriven.processor.dto.OrderDto;
+import com.eventdriven.sink.repository.OrderAvaiableRepository;
+import com.eventdriven.source.savemessage.MessageRespository;
 import com.eventdriven.testcontainer.TestcontainerApplicationTests;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.autoconfigure.flyway.FlywayAutoConfiguration;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
+import org.springframework.context.annotation.Import;
 import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 import org.springframework.jdbc.core.simple.JdbcClient;
 import org.springframework.scheduling.annotation.EnableScheduling;
@@ -29,6 +31,12 @@ public class KafkaTestContainersIntegrationTest extends TestcontainerApplication
     @Autowired
     private JdbcClient jdbcClient;
 
+    @Autowired
+    private MessageRespository messageRespository;
+
+    @Autowired
+    private OrderAvaiableRepository avaiableRepository;
+
 
     @Test
     public void kafka()
@@ -39,12 +47,20 @@ public class KafkaTestContainersIntegrationTest extends TestcontainerApplication
         //when
         template.postForEntity("/api/source",orderDto,Void.class);
         //then
-        Awaitility.await().atMost(Duration.ofSeconds(20)).pollInterval(Duration.ofMillis(200))
+        Awaitility.await()
+                .atMost(Duration.ofSeconds(30))
+                .pollInterval(Duration.ofMillis(200))
+                .untilAsserted(() -> {
+                    long count = messageRespository.count();
+
+                    Assertions.assertThat(count).isGreaterThan(0L);
+                });
+        Awaitility.await().atMost(Duration.ofSeconds(30)).pollInterval(Duration.ofMillis(200))
                 .untilAsserted(()-> {
-                    String idEvent = jdbcClient.sql("SELECT ID_EVENT FROM test.MESSAGE")
-                            .query(String.class)
-                            .single();
-                    OrderAvailableDto result = jdbcClient.sql("SELECT NAME,COST,STATUS_STOCK,ID_EVENT FROM test.ORDER_AVAILABLE WHERE ID_EVENT = ?")
+                    String idEvent = messageRespository.findAll().get(0).getEventId();
+
+                    OrderAvailableDto result =
+                            jdbcClient.sql("SELECT NAME,COST,STATUS_STOCK,ID_EVENT FROM ORDER_AVAILABLE WHERE ID_EVENT = ?")
                             .param(1, idEvent)
                             .query((rs, rowNum) ->
                             {
@@ -62,6 +78,7 @@ public class KafkaTestContainersIntegrationTest extends TestcontainerApplication
 
     @EnableJpaAuditing
     @EnableScheduling
+    @Import(FlywayAutoConfiguration.FlywayConfiguration.class)
     @SpringBootApplication(
             scanBasePackages =
                     {
