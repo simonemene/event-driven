@@ -66,6 +66,7 @@ class TestcontainersConfiguration {
 	MySQLContainer<?> mySqlContainer()
 	{
 		return new MySQLContainer<>("mysql:8.0")
+				.withDatabaseName("test")
 				.withUsername("user")
 				.withPassword("sa");
 	}

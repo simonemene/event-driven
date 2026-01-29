@@ -3,22 +3,24 @@ package com.eventdriven.testcontainer.kafka;
 import com.eventdriven.processor.ProcessorApplication;
 import com.eventdriven.processor.dto.OrderAvailableDto;
 import com.eventdriven.processor.dto.OrderDto;
-import com.eventdriven.sink.SinkApplication;
-import com.eventdriven.source.SourceApplication;
 import com.eventdriven.testcontainer.TestcontainerApplicationTests;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
-import org.springframework.context.annotation.Import;
 import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 import org.springframework.jdbc.core.simple.JdbcClient;
 import org.springframework.scheduling.annotation.EnableScheduling;
+import org.testcontainers.shaded.org.awaitility.Awaitility;
 
 import java.math.BigDecimal;
+import java.time.Duration;
 
+@SpringBootTest(classes = KafkaTestContainersIntegrationTest.ContextApplication.class,
+        webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public class KafkaTestContainersIntegrationTest extends TestcontainerApplicationTests {
 
     @Autowired
@@ -37,24 +39,27 @@ public class KafkaTestContainersIntegrationTest extends TestcontainerApplication
         //when
         template.postForEntity("/api/source",orderDto,Void.class);
         //then
-        String idEvent = jdbcClient.sql("SELECT ID_EVENT FROM MESSAGE")
-                .query(String.class)
-                .single();
-        OrderAvailableDto result = jdbcClient.sql("SELECT NAME,COST,STATUS_STOCK,ID_EVENT FROM ORDER_AVAILABLE WHERE ID_EVENT = ?")
-                .param(1,idEvent)
-                .query((rs,rowNum)->
-                {
-                    return new OrderAvailableDto(
-                            new OrderDto(rs.getString(4),rs.getString(1),rs.getBigDecimal(2)),
-                                    rs.getString(3));
+        Awaitility.await().atMost(Duration.ofSeconds(20)).pollInterval(Duration.ofMillis(200))
+                .untilAsserted(()-> {
+                    String idEvent = jdbcClient.sql("SELECT ID_EVENT FROM test.MESSAGE")
+                            .query(String.class)
+                            .single();
+                    OrderAvailableDto result = jdbcClient.sql("SELECT NAME,COST,STATUS_STOCK,ID_EVENT FROM test.ORDER_AVAILABLE WHERE ID_EVENT = ?")
+                            .param(1, idEvent)
+                            .query((rs, rowNum) ->
+                            {
+                                return new OrderAvailableDto(
+                                        new OrderDto(rs.getString(4), rs.getString(1), rs.getBigDecimal(2)),
+                                        rs.getString(3));
 
-                }).single();
-        Assertions.assertThat(result.order().name()).isEqualTo(orderDto.name());
-        Assertions.assertThat(result.order().cost()).isEqualTo(orderDto.cost());
+                            }).single();
+                    Assertions.assertThat(result.order().name()).isEqualTo(orderDto.name());
+                    Assertions.assertThat(result.order().cost()).isEqualTo(orderDto.cost());
+                }
+                );
     }
 
 
-    @EnableAutoConfiguration
     @EnableJpaAuditing
     @EnableScheduling
     @SpringBootApplication(
@@ -65,7 +70,7 @@ public class KafkaTestContainersIntegrationTest extends TestcontainerApplication
                             "com.eventdriven.sink",
                     }
     )
-    public static class application
+    public static class ContextApplication
     {
 
     }
