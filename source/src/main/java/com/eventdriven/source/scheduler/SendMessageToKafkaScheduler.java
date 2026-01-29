@@ -23,7 +23,8 @@ public class SendMessageToKafkaScheduler {
 	private final MessageRespository respository;
 
 
-	@Scheduled(fixedDelayString = "${spring.scheduling.time}")
+	@Scheduled(fixedDelayString = "${spring.scheduling.time}",
+			initialDelayString = "${spring.scheduled.delay}")
 	public void publish()
 	{
 		List<MessageEntity> lastMessage =

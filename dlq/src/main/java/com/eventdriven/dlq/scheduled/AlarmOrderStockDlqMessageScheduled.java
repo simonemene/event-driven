@@ -16,7 +16,8 @@ public class AlarmOrderStockDlqMessageScheduled implements IAlarmScheduled{
 
 	private final IOrderSupportQueryService<OrderAvailableDto> service;
 
-	@Scheduled(fixedDelayString = "${spring.scheduled.time}")
+	@Scheduled(fixedDelayString = "${spring.scheduled.time}",
+	initialDelayString = "${spring.scheduled.delay}")
 	@Override
 	public void alarm() {
 		List<OrderAvailableDto> listAlarmOrder = service.getElmentDlq();
