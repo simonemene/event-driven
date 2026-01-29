@@ -59,6 +59,15 @@ class TestcontainersConfiguration {
 				.build();
 	}
 
+	@Bean
+	NewTopic configServerTopic()
+	{
+		return TopicBuilder.name("spring-cloud-bus")
+				.partitions(1)
+				.replicas(1)
+				.build();
+	}
+
 
 
 	@Bean

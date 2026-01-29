@@ -73,6 +73,7 @@ public class KafkaTestContainersIntegrationTest extends TestcontainerApplication
                     Assertions.assertThat(result.order().cost()).isEqualTo(orderDto.cost());
                 }
                 );
+
     }
 
 
@@ -85,6 +86,7 @@ public class KafkaTestContainersIntegrationTest extends TestcontainerApplication
                             "com.eventdriven.source",
                             "com.eventdriven.processor",
                             "com.eventdriven.sink",
+                            "com.eventdriven.configserver"
                     }
     )
     public static class ContextApplication
