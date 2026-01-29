@@ -1,6 +1,7 @@
 package com.eventdriven.sink.stream;
 
 import com.eventdriven.sink.SinkApplicationTests;
+import com.eventdriven.sink.configuration.JpaEnableConfiguration;
 import com.eventdriven.sink.dto.OrderAvailableDto;
 import com.eventdriven.sink.dto.OrderDto;
 import org.junit.jupiter.api.Assertions;
@@ -23,7 +24,7 @@ import java.math.BigDecimal;
                 "spring.datasource.driver-class-name=org.h2.Driver"
         }
 )
-@Import({TestChannelBinderConfiguration.class, SinkConfiguration.class})
+@Import({TestChannelBinderConfiguration.class, SinkConfiguration.class, JpaEnableConfiguration.class})
 public class SinkApplicationIntegrationTest extends SinkApplicationTests {
 
     @Autowired

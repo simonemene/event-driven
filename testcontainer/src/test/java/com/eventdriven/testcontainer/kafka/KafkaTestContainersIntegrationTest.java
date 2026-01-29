@@ -10,9 +10,12 @@ import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.context.annotation.Import;
+import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 import org.springframework.jdbc.core.simple.JdbcClient;
+import org.springframework.scheduling.annotation.EnableScheduling;
 
 import java.math.BigDecimal;
 
@@ -52,9 +55,16 @@ public class KafkaTestContainersIntegrationTest extends TestcontainerApplication
 
 
     @EnableAutoConfiguration
-    @Import({
-            SourceApplication.class, SinkApplication.class, ProcessorApplication.class
-    })
+    @EnableJpaAuditing
+    @EnableScheduling
+    @SpringBootApplication(
+            scanBasePackages =
+                    {
+                            "com.eventdriven.source",
+                            "com.eventdriven.processor",
+                            "com.eventdriven.sink",
+                    }
+    )
     public static class application
     {
 

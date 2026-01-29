@@ -39,7 +39,7 @@ public class ProcessorConfiguration {
         };
     }
 
-    @Bean
+    @Bean("processorValidation")
     public Validator validator()
     {
         return Validation.buildDefaultValidatorFactory().getValidator();

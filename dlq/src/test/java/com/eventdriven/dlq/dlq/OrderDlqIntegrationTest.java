@@ -1,6 +1,7 @@
 package com.eventdriven.dlq.dlq;
 
 import com.eventdriven.dlq.DlqApplicationTests;
+import com.eventdriven.dlq.configuration.EnableSchedulingConfiguration;
 import com.eventdriven.dlq.configuration.OrderDlqConfiguration;
 import com.eventdriven.dlq.dto.OrderAvailableDto;
 import com.eventdriven.dlq.dto.OrderDto;
@@ -41,7 +42,7 @@ import java.time.Duration;
 				"spring.scheduled.time=100"
 		})
 @AutoConfigureTestDatabase
-@Import({TestChannelBinderConfiguration.class, OrderDlqConfiguration.class})
+@Import({TestChannelBinderConfiguration.class, OrderDlqConfiguration.class, EnableSchedulingConfiguration.class})
 public class OrderDlqIntegrationTest {
 
 	@Autowired
