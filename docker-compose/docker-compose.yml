@@ -118,6 +118,9 @@ services:
       SPRING_CLOUD_STREAM_BINDINGS_ORDERCHECKAVAIABLE_OUT_0_DESTINATION: stock-topic
       SPRING_CLOUD_STREAM_BINDINGS_ORDERCHECKAVAIABLE_IN_0_DESTINATION: order-topic
       SPRING_CONFIG_IMPORT: configserver:http://configserver:8081/
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/appdb
+      SPRING_DATASOURCE_USERNAME: appuser
+      SPRING_DATASOURCE_PASSWORD: apppwd
     depends_on:
       configserver:
         condition: service_healthy

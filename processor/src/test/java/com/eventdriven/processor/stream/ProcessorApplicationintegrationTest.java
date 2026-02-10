@@ -13,6 +13,7 @@ import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.cloud.stream.binder.test.InputDestination;
 import org.springframework.cloud.stream.binder.test.OutputDestination;
 import org.springframework.cloud.stream.binder.test.TestChannelBinderConfiguration;
@@ -24,6 +25,7 @@ import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import java.io.IOException;
 import java.math.BigDecimal;
 
+@AutoConfigureTestDatabase
 @Import(TestChannelBinderConfiguration.class)
 public class ProcessorApplicationintegrationTest extends ProcessorApplicationTests {
 
@@ -53,7 +55,7 @@ public class ProcessorApplicationintegrationTest extends ProcessorApplicationTes
     public void processor() throws IOException {
         //given
         Mockito.when(service.isAvaiable()).thenReturn(ProcessorEnum.IN_STOCK.getValue());
-        OrderDto orderDto = new OrderDto("12a","apple",new BigDecimal("10.2"));
+        OrderDto orderDto = new OrderDto("12a","apple",new BigDecimal("10.2"),"12");
         OrderAvailableDto check = new OrderAvailableDto(orderDto,ProcessorEnum.IN_STOCK.getValue());
         Message<OrderDto> messageInput = MessageBuilder.withPayload(orderDto).build();
         //when

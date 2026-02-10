@@ -52,7 +52,7 @@ public class CircuitBreakerIntegrationTest extends SourceApplicationTests {
 		//given
 		Mockito.when(kafkaTemplate.send(Mockito.any(),Mockito.any(),Mockito.any())).thenThrow(new KafkaException("error"));
 
-		OrderDto orderDto = new OrderDto("phone",new BigDecimal("10.21"));
+		OrderDto orderDto = new OrderDto("phone",new BigDecimal("10.21"),"12");
 		ObjectMapper objectMapper = new ObjectMapper();
 		ObjectNode objectNode = objectMapper.createObjectNode();
 		objectNode.put("name",orderDto.name());
@@ -99,7 +99,7 @@ public class CircuitBreakerIntegrationTest extends SourceApplicationTests {
 		Mockito.when(kafkaTemplate.send(Mockito.any(),Mockito.any(),Mockito.any())).thenThrow(new KafkaException("error"));
 
 
-		OrderDto orderDto = new OrderDto("phone",new BigDecimal("10.21"));
+		OrderDto orderDto = new OrderDto("phone",new BigDecimal("10.21"),"12");
 		ObjectMapper objectMapper = new ObjectMapper();
 		ObjectNode objectNode = objectMapper.createObjectNode();
 		objectNode.put("name",orderDto.name());

@@ -40,7 +40,7 @@ public class SaveMessageIntegrationTest extends SourceApplicationTests
 	@Test
 	public void saveMessage() throws JsonProcessingException {
 		//given
-		OrderDto orderDto = new OrderDto("phone",new BigDecimal("10.21"));
+		OrderDto orderDto = new OrderDto("phone",new BigDecimal("10.21"),"12");
 		ObjectMapper objectMapper = new ObjectMapper();
 		ObjectNode objectNode = objectMapper.createObjectNode();
 		objectNode.put("name",orderDto.name());
