@@ -11,6 +11,7 @@ public record OrderDto(
         @NotBlank(message = "Order name must not be blank") String name,
         @NotNull(message = "Cost must no be null")
         @Positive(message = "Order cost must be greater than zero")
-        BigDecimal cost) {
+        BigDecimal cost,
+        String eventiId) {
 
 }
