@@ -1,14 +1,12 @@
 package com.eventdriven.processor.service;
 
 import com.eventdriven.processor.dto.OrderDto;
-import com.eventdriven.processor.exception.IdEventDuplicateException;
 import com.eventdriven.processor.mapper.OrderMapper;
 import com.eventdriven.processor.repository.IdempotencyRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 @Slf4j
 @RequiredArgsConstructor
