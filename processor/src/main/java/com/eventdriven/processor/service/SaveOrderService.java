@@ -5,10 +5,12 @@ import com.eventdriven.processor.exception.IdEventDuplicateException;
 import com.eventdriven.processor.mapper.OrderMapper;
 import com.eventdriven.processor.repository.IdempotencyRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+@Slf4j
 @RequiredArgsConstructor
 @Service
 public class SaveOrderService implements  ISaveOrderService{
@@ -17,14 +19,13 @@ public class SaveOrderService implements  ISaveOrderService{
 
 	private final OrderMapper mapper;
 
-	@Transactional
 	@Override
 	public void saveOrder(OrderDto order) {
 		try {
 			repository.save(mapper.toEntity(order));
 		}catch(DataIntegrityViolationException e)
 		{
-			throw new IdEventDuplicateException("duplicate event",order.eventiId());
+			log.warn("Duplicate key: {}",order.eventiId());
 		}
 	}
 }
