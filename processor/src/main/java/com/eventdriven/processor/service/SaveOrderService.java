@@ -5,6 +5,7 @@ import com.eventdriven.processor.exception.IdEventDuplicateException;
 import com.eventdriven.processor.mapper.OrderMapper;
 import com.eventdriven.processor.repository.IdempotencyRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -19,10 +20,11 @@ public class SaveOrderService implements  ISaveOrderService{
 	@Transactional
 	@Override
 	public void saveOrder(OrderDto order) {
-		if(repository.existsByidEvent(order.eventiId()))
+		try {
+			repository.save(mapper.toEntity(order));
+		}catch(DataIntegrityViolationException e)
 		{
-			throw new IdEventDuplicateException("duplicate event");
+			throw new IdEventDuplicateException("duplicate event",order.eventiId());
 		}
-		repository.save(mapper.toEntity(order));
 	}
 }
