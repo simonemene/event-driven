@@ -77,6 +77,8 @@ services:
     container_name: configserver
     ports:
       - "8081:8081"
+    environment:
+      ENCRYPT_KEY: a04d70d226b8a7aa4e3f42a197902cbd48a7a2d013d817f4b0b634dc2bbf195a
     healthcheck:
       test: ["CMD","curl","-f","http://localhost:8081/actuator/health/readiness"]
       interval: 15s

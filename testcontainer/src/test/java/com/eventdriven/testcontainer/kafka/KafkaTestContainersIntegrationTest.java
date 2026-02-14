@@ -12,6 +12,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.flyway.FlywayAutoConfiguration;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
+import org.springframework.context.annotation.DependsOn;
 import org.springframework.context.annotation.Import;
 import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 import org.springframework.jdbc.core.simple.JdbcClient;
@@ -85,8 +86,7 @@ public class KafkaTestContainersIntegrationTest extends TestcontainerApplication
                     {
                             "com.eventdriven.source",
                             "com.eventdriven.processor",
-                            "com.eventdriven.sink",
-                            "com.eventdriven.configserver"
+                            "com.eventdriven.sink"
                     }
     )
     public static class ContextApplication
