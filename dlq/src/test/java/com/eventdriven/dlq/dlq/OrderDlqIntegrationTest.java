@@ -28,6 +28,7 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.jdbc.core.simple.JdbcClient;
 import org.springframework.messaging.support.MessageBuilder;
 import org.springframework.scheduling.annotation.EnableScheduling;
+import org.springframework.test.context.ActiveProfiles;
 
 import java.math.BigDecimal;
 import java.time.Duration;
@@ -39,7 +40,8 @@ import java.time.Duration;
 				"spring.cloud.config.enabled=false",
 				"spring.cloud.function.definition=dqlOrder",
 				"spring.config.import=",
-				"spring.scheduled.time=100"
+				"spring.scheduled.time=100",
+				"spring.scheduled.delay=0"
 		})
 @AutoConfigureTestDatabase
 @Import({TestChannelBinderConfiguration.class, OrderDlqConfiguration.class, EnableSchedulingConfiguration.class})

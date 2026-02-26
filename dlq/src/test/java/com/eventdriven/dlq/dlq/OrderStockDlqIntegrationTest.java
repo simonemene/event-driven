@@ -36,7 +36,8 @@ import java.time.Duration;
 				"spring.cloud.config.enabled=false",
 				"spring.cloud.function.definition=dlqStockOrder",
 				"spring.config.import=",
-				"spring.scheduled.time=100"
+				"spring.scheduled.time=100",
+				"spring.scheduled.delay=0"
 		})
 @AutoConfigureTestDatabase
 @Import({ TestChannelBinderConfiguration.class, OrderStockConfiguration.class, EnableSchedulingConfiguration.class })
