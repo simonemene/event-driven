@@ -78,7 +78,6 @@ public class DownDBIntegrationTest extends ProcessorApplicationTests {
                             Assertions.assertThat(record).isNotNull();
                         }
                 );
-
     }
 
 }
