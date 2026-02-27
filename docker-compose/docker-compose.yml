@@ -31,10 +31,15 @@ services:
 
   kafka-exporter:
     image: danielqsj/kafka-exporter
+    container_name: kafka-exporter
+    restart: always
     command:
       - --kafka.server=kafka:9092
+      - --kafka.version=3.6.0
     ports:
       - "9308:9308"
+    depends_on:
+      - kafka
     extends:
       file: common-config.yml
       service: common-network
@@ -71,7 +76,7 @@ services:
       KAFKA_NODE_ID: 1
       KAFKA_PROCESS_ROLES: broker,controller
 
-      KAFKA_LISTENERS: PLAINTEXT://kafka:9092,CONTROLLER://kafka:9093
+      KAFKA_LISTENERS: PLAINTEXT://0.0.0.0:9092,CONTROLLER://0.0.0.0:9093
       KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:9092
       KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,CONTROLLER:PLAINTEXT
       KAFKA_CONTROLLER_LISTENER_NAMES: CONTROLLER
