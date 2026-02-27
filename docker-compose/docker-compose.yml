@@ -29,6 +29,16 @@ services:
       file: common-config.yml
       service: common-network
 
+  kafka-exporter:
+    image: danielqsj/kafka-exporter
+    command:
+      - --kafka.server=kafka:9092
+    ports:
+      - "9308:9308"
+    extends:
+      file: common-config.yml
+      service: common-network
+
 
   mysql:
     image: mysql:8.4
