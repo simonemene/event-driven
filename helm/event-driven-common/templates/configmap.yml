@@ -1,0 +1,24 @@
+{{- define "common.configmap" -}}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ .Values.global.configMapName }}
+data:
+  SPRING_KAFKA_BOOTSTRAP_SERVERS: {{ .Values.global.kafkaServer }}
+  SPRING_CLOUD_STREAM_BINDINGS_ORDER_OUT_0_DESTINATION: {{ .Values.global.orderDestination }}
+  SPRING_CONFIG_IMPORT: {{ .Values.global.configUrl }}
+  SPRING_DATASOURCE_URL: {{ .Values.global.mysqlUrl }}
+  SPRING_DATASOURCE_USERNAME: {{ .Values.global.username }}
+  SPRING_DATASOURCE_PASSWORD: {{ .Values.global.password }}
+
+  SPRING_CLOUD_STREAM_BINDINGS_ORDERCHECKAVAIABLE_OUT_0_DESTINATION: {{ .Values.global.orderCheckOut }}
+  SPRING_CLOUD_STREAM_BINDINGS_ORDERCHECKAVAIABLE_IN_0_DESTINATION: {{ .Values.global.orderCheckIn }}
+
+  SPRING_CLOUD_STREAM_BINDINGS_CONSUMER_IN_0_DESTINATION: {{ .Values.global.consumerIn }}
+
+
+  SPRING_CLOUD_STREAM_BINDINGS_DLQSTOCKORDER_IN_0_DESTINATION: {{ .Values.global.stockDlq }}
+  SPRING_CLOUD_STREAM_BINDINGS_DLQORDER_IN_0_DESTINATION: o{{ .Values.global.orderDlq }}
+  SPRING_CLOUD_STREAM_BINDINGS_DLQSTOCKORDER_IN_0_GROUP: {{ .Values.global.stockDlqGroup }}
+  SPRING_CLOUD_STREAM_BINDINGS_DLQORDER_IN_0_GROUP: {{ .Values.global.orderDlqGroup }}
+{{- end -}}

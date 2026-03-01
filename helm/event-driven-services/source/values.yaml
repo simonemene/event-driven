@@ -1,0 +1,22 @@
+deploymentName: source-deployment
+serviceName: source
+appLabel: source
+appName: source
+
+replicaCount: 1
+
+image:
+  repository: source
+  tag: s1
+
+containerPort: 8080
+
+service:
+  type: ClusterIP
+  port: 8080
+  targetPort: 8080
+
+appname_enabled: true
+profile_enabled: true
+config_enabled: true
+kafka_enabled: true
