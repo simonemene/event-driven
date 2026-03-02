@@ -31,6 +31,29 @@ jobs:
       - name: Login to GHCR
         run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
 
-      - name: Build image with Job
-        run: mvn compile jib:build
-          -Dimage=ghcr.io/${{ github.repository }}:latest
+      - name: Build configserver image
+        run: |
+          mvn -pl configserver compile jib:build \
+          -Dimage=ghcr.io/${{ github.repository_owner }}/configserver:${{ github.sha }}
+
+      - name: Build processor image
+        run: |
+          mvn -pl processor compile jib:build \
+          -Dimage=ghcr.io/${{ github.repository_owner }}/processor:${{ github.sha }}
+
+      - name: Build sink image
+        run: |
+          mvn -pl sink compile jib:build \
+          -Dimage=ghcr.io/${{ github.repository_owner }}/sink:${{ github.sha }}
+
+      - name: Build dlq image
+        run: |
+          mvn -pl dlq compile jib:build \
+          -Dimage=ghcr.io/${{ github.repository_owner }}/dlq:${{ github.sha }}
+
+      - name: Build source image
+        run: |
+          mvn -pl source compile jib:build \
+          -Dimage=ghcr.io/${{ github.repository_owner }}/source:${{ github.sha }}
+          
+      
