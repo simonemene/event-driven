@@ -28,6 +28,9 @@ jobs:
       - name: Build with Maven
         run: mvn clean verify
 
+      - name: Login to GHCR
+        run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
+
       - name: Build image with Job
         run: mvn compile jib:build
           -Dimage=ghcr.io/${{ github.repository }}:latest
