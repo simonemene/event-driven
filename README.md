@@ -180,6 +180,31 @@ show databases;
 use appdb;
 show tables;
 
+### 6. CI/CD (GitHub Actions + GHCR)
+
+This repository includes a GitHub Actions pipeline that automates the build and delivery of the microservices.
+
+What the pipeline does:
+builds and tests the multi-module Maven project (mvn clean verify)
+builds Docker images using Jib (no Docker daemon required)
+pushes images to GitHub Container Registry (GHCR) under the Packages section of the repository
+
+Image naming convention:
+one image per microservice (recommended for independent deployments)
+images are tagged with the commit SHA for immutable releases (recommended), optionally also latest
+
+Example image reference:
+ghcr.io/<owner>/configserver:<sha>
+ghcr.io/<owner>/source:<sha>
+ghcr.io/<owner>/processor:<sha>
+ghcr.io/<owner>/sink:<sha>
+ghcr.io/<owner>/dlq:<sha>
+
+### 7. Kubernetes Deployment (Helm)
+
+Stay tuned, deployment automation will be added shortly
+
+
  Final Notes
 
 This project is not a toy example.
