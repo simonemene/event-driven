@@ -1,0 +1,25 @@
+deploymentName: sink-deployment
+serviceName: sink
+appLabel: sink
+appName: sink
+
+replicaCount: 1
+
+image:
+  repository: sink
+  tag: s1
+
+containerPort: 8092
+
+service:
+  type: ClusterIP
+  port: 8092
+  targetPort: 8092
+
+
+
+
+appname_enabled: false
+profile_enabled: true
+config_enabled: true
+kafka_enabled: true

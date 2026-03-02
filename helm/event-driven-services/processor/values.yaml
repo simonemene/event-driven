@@ -1,0 +1,25 @@
+deploymentName: processor-deployment
+serviceName: processor
+appLabel: processor
+appName: processor
+
+replicaCount: 1
+
+image:
+  repository: processor
+  tag: s1
+
+containerPort: 8091
+
+service:
+  type: ClusterIP
+  port: 8091
+  targetPort: 8091
+
+
+
+
+appname_enabled: false
+profile_enabled: true
+config_enabled: true
+kafka_enabled: true

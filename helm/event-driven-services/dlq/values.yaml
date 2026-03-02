@@ -1,0 +1,25 @@
+deploymentName: dlq-deployment
+serviceName: dlq
+appLabel: dlq
+appName: dlq
+
+replicaCount: 1
+
+image:
+  repository: dlq
+  tag: s1
+
+containerPort: 8093
+
+service:
+  type: ClusterIP
+  port: 8093
+  targetPort: 8093
+
+
+
+
+appname_enabled: false
+profile_enabled: true
+config_enabled: true
+kafka_enabled: true
