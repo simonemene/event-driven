@@ -11,6 +11,8 @@ global:
   username: appuser
   password: apppwd
 
+  profile: prod
+
   orderCheckOut: stock-topic
   orderCheckIn: order-topic
   consumerIn: stock-topic
