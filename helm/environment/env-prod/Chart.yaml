@@ -22,3 +22,24 @@ version: 0.1.0
 # follow Semantic Versioning. They should reflect the version the application is using.
 # It is recommended to use it with quotes.
 appVersion: "1.0.0"
+
+
+dependencies:
+  - name: event-driven-common
+    version: 0.1.0
+    repository: file://../../event-driven-common
+  - name: source
+    version: 0.1.0
+    repository: file://../../event-driven-service/source
+  - name: dlq
+    version: 0.1.0
+    repository: file://../../event-driven-service/dlq
+  - name: processor
+    version: 0.1.0
+    repository: file://../../event-driven-service/processor
+  - name: sink
+    version: 0.1.0
+    repository: file://../../event-driven-service/sink
+  - name: configserver
+    version: 0.1.0
+    repository: file://../../event-driven-service/configserver
