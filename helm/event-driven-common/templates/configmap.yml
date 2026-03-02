@@ -5,6 +5,7 @@ metadata:
   name: {{ .Values.global.configMapName }}
 data:
   SPRING_KAFKA_BOOTSTRAP_SERVERS: {{ .Values.global.kafkaServer }}
+  SPRING_CLOUD_STREAM_KAFKA_BINDER_BROKERS: {{ .Values.global.binderBroker }}
   SPRING_CLOUD_STREAM_BINDINGS_ORDER_OUT_0_DESTINATION: {{ .Values.global.orderDestination }}
   SPRING_CONFIG_IMPORT: {{ .Values.global.configUrl }}
   SPRING_DATASOURCE_URL: {{ .Values.global.mysqlUrl }}

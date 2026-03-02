@@ -1,19 +1,21 @@
 global:
-  SPRING_KAFKA_BOOTSTRAP_SERVERS: kafka:9092
-  SPRING_CLOUD_STREAM_KAFKA_BINDER_BROKERS: kafka:9092
+  configMapName: globalProdMap
 
-  SPRING_CLOUD_STREAM_BINDINGS_ORDER_OUT_0_DESTINATION: order-topic
-  SPRING_CONFIG_IMPORT: configserver:http://configserver:8081/
+  kafkaServer: kafka:9092
+  binderBroker: kafka:9092
 
-  SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/appdb
-  SPRING_DATASOURCE_USERNAME: appuser
-  SPRING_DATASOURCE_PASSWORD: apppwd
+  orderDestination: order-topic
+  configUrl: configserver:http://configserver:8081/
 
-  SPRING_CLOUD_STREAM_BINDINGS_ORDERCHECKAVAIABLE_OUT_0_DESTINATION: stock-topic
-  SPRING_CLOUD_STREAM_BINDINGS_ORDERCHECKAVAIABLE_IN_0_DESTINATION: order-topic
-  SPRING_CLOUD_STREAM_BINDINGS_CONSUMER_IN_0_DESTINATION: stock-topic
+  mysqlUrl: jdbc:mysql://mysql:3306/appdb
+  username: appuser
+  password: apppwd
 
-  SPRING_CLOUD_STREAM_BINDINGS_DLQSTOCKORDER_IN_0_DESTINATION: stock-topic.dlq
-  SPRING_CLOUD_STREAM_BINDINGS_DLQORDER_IN_0_DESTINATION: order-topic.dlq
-  SPRING_CLOUD_STREAM_BINDINGS_DLQSTOCKORDER_IN_0_GROUP: stock-topic.dlq
-  SPRING_CLOUD_STREAM_BINDINGS_DLQORDER_IN_0_GROUP: order-topic.dlq
+  orderCheckOut: stock-topic
+  orderCheckIn: order-topic
+  consumerIn: stock-topic
+
+  stockDlq: stock-topic.dlq
+  orderDlq: order-topic.dlq
+  stockDlqGroup: stock-topic.dlq
+  orderDlqGroup: order-topic.dlq
