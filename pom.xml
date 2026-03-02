@@ -25,6 +25,7 @@
         <module>source</module>
         <module>processor</module>
         <module>sink</module>
+        <module>dlq</module>
     </modules>
 
     <properties>
