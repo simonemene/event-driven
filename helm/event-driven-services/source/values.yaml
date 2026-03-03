@@ -20,3 +20,4 @@ appname_enabled: true
 profile_enabled: true
 config_enabled: true
 kafka_enabled: true
+mysql_enabled: true

@@ -1,22 +1,16 @@
 global:
   configMapName: event-driven-map
-
   kafkaServer: kafka-controller-0.kafka-controller-headless.default.svc.cluster.local:9092
   binderBroker: kafka-controller-0.kafka-controller-headless.default.svc.cluster.local:9092
-
   orderDestination: order-topic
   configUrl: configserver:http://configserver:8081/
-
-  mysqlUrl: jdbc:mysql://mysql:3306/appdb
+  mysqlUrl: jdbc:mysql://mysql-mysql:3306/appdb
   username: appuser
   password: apppwd
-
   profile: prod
-
   orderCheckOut: stock-topic
   orderCheckIn: order-topic
   consumerIn: stock-topic
-
   stockDlq: stock-topic.dlq
   orderDlq: order-topic.dlq
   stockDlqGroup: stock-topic.dlq

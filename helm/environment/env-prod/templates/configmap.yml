@@ -1,1 +1,1 @@
-{{ include "common.configmap" . }}
+{{- template "common.configmap" . -}}
