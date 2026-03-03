@@ -15,7 +15,7 @@ data:
     - name: Prometheus
       type: prometheus
       uid: prometheus
-      url: http://kube-prometheus:9090
+      url: http://kube-prometheus.default.svc.cluster.local:9090
       access: proxy
       isDefault: true
       editable: true
