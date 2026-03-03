@@ -10,46 +10,12 @@ data:
 
     deleteDatasources:
       - name: Prometheus
-      - name: Loki
-      - name: Tempo
 
     datasources:
-      - name: Prometheus
-        type: prometheus
-        uid: prometheus
-        url: {{ .Values.datasources.prometheus.url }}
-        access: proxy
-        orgId: 1
-        basicAuth: false
-        isDefault: false
-        version: 1
-        editable: true
-        jsonData:
-          httpMethod: GET
-      - name: Tempo
-        type: tempo
-        uid: tempo
-        url: {{ .Values.datasources.tempo.url }}
-        access: proxy
-        orgId: 1
-        basicAuth: false
-        isDefault: false
-        version: 1
-        editable: true
-        jsonData:
-          httpMethod: GET
-          serviceMap:
-            datasourceUid: 'prometheus'
-      - name: Loki
-        type: loki
-        uid: loki
-        access: proxy
-        orgId: 1
-        editable: true
-        url: {{ .Values.datasources.loki.url }}
-        jsonData:
-          derivedFields:
-            - datasourceUid: tempo
-              matcherRegex: "\\[.+,(.+),.+\\]"
-              name: TraceID
-              url: '$${__value.raw}'
+    - name: Prometheus
+      type: prometheus
+      uid: prometheus
+      url: http://kube-prometheus:9090
+      access: proxy
+      isDefault: true
+      editable: true
