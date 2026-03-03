@@ -1,5 +1,5 @@
 global:
-  configMapName: globalProdMap
+  configMapName: event-driven-map
 
   kafkaServer: kafka-controller-0.kafka-controller-headless.default.svc.cluster.local:9092
   binderBroker: kafka-controller-0.kafka-controller-headless.default.svc.cluster.local:9092
