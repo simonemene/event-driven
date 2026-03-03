@@ -1,8 +1,8 @@
 global:
   configMapName: globalProdMap
 
-  kafkaServer: kafka:9092
-  binderBroker: kafka:9092
+  kafkaServer: kafka-controller-0.kafka-controller-headless.default.svc.cluster.local:9092
+  binderBroker: kafka-controller-0.kafka-controller-headless.default.svc.cluster.local:9092
 
   orderDestination: order-topic
   configUrl: configserver:http://configserver:8081/
