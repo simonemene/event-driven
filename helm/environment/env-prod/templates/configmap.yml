@@ -1,1 +1,1 @@
-{{ include "common-configmap" . }}
+{{ include "common.configmap" . }}
