@@ -1,14 +1,14 @@
 {{/*
 Expand the name of the chart.
 */}}
-{{- define "kafka.name" -}}
+{{- define "kube-prometheus.name" -}}
 {{- default .Chart.Name .Values.nameOverride | trunc 63 | trimSuffix "-" }}
 {{- end }}
 
 {{/*
 Create a default fully qualified app name.
 */}}
-{{- define "kafka.fullname" -}}
+{{- define "kube-prometheus.fullname" -}}
 {{- if .Values.fullnameOverride }}
 {{- .Values.fullnameOverride | trunc 63 | trimSuffix "-" }}
 {{- else }}
@@ -24,16 +24,16 @@ Create a default fully qualified app name.
 {{/*
 Create chart name and version as used by the chart label.
 */}}
-{{- define "kafka.chart" -}}
+{{- define "kube-prometheus.chart" -}}
 {{- printf "%s-%s" .Chart.Name .Chart.Version | replace "+" "_" | trunc 63 | trimSuffix "-" }}
 {{- end }}
 
 {{/*
 Common labels
 */}}
-{{- define "kafka.labels" -}}
-helm.sh/chart: {{ include "kafka.chart" . }}
-{{ include "kafka.selectorLabels" . }}
+{{- define "kube-prometheus.labels" -}}
+helm.sh/chart: {{ include "kube-prometheus.chart" . }}
+{{ include "kube-prometheus.selectorLabels" . }}
 {{- if .Chart.AppVersion }}
 app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
 {{- end }}
@@ -43,7 +43,7 @@ app.kubernetes.io/managed-by: {{ .Release.Service }}
 {{/*
 Selector labels
 */}}
-{{- define "kafka.selectorLabels" -}}
-app.kubernetes.io/name: {{ include "kafka.name" . }}
+{{- define "kube-prometheus.selectorLabels" -}}
+app.kubernetes.io/name: {{ include "kube-prometheus.name" . }}
 app.kubernetes.io/instance: {{ .Release.Name }}
 {{- end }}
