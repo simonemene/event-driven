@@ -1,0 +1,29 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "kafka-exporter.fullname" . }}
+  labels:
+    {{ include "kafka-exporter.labels" . | nindent 4 }}
+spec:
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+      {{ include "kafka-exporter.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      labels:
+        {{ include "kafka-exporter.selectorLabels" . | nindent 8 }}
+    spec:
+      containers:
+        - name: kafka-exporter
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          args:
+            - --kafka.server={{ .Values.kafkaExporter.kafkaServer }}
+            - --kafka.version={{ .Values.kafkaExporter.kafkaVersion }}
+          ports:
+            - name: metrics
+              containerPort: 9308
+              protocol: TCP
+          resources:
+            {{ toYaml .Values.resources | nindent 12 }}
