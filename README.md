@@ -91,6 +91,7 @@ Sink -->|Persistence Error| DLQTopic
 
 DLQTopic --> DLQService
 DLQService --> DLQStore
+```
 
 ---
 
