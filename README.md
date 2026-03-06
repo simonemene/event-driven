@@ -61,6 +61,66 @@ Kafka Topics:
 
 ---
 
+## Observability
+
+The system includes a basic observability stack to monitor both the infrastructure and the event-driven pipeline.
+
+The following tools are used:
+ - Prometheus – metrics collection and storage
+ - Grafana – visualization and dashboards
+ - Kafka Exporter – exposes Kafka broker metrics to Prometheus
+This setup allows monitoring the health and behavior of the event-driven system in real time.
+
+### Prometheus
+
+Prometheus is responsible for scraping metrics from the various components of the system.
+Metrics are collected from:
+ - Kafka broker
+ - Kafka exporter
+ - microservices (via Spring Boot Actuator, if enabled)
+Prometheus periodically scrapes the exposed metrics endpoints and stores them as time-series data.
+This enables:
+ - monitoring system health
+ - identifying bottlenecks
+ - tracking message flow metrics
+
+### Kafka Exporter
+Kafka does not expose Prometheus metrics natively in a convenient way.
+To solve this, the system uses Kafka Exporter, which exposes Kafka metrics in Prometheus format.
+ - Kafka Exporter provides metrics such as:
+ - Kafka broker status
+ - topic offsets
+ - consumer lag
+ - partition metrics
+ - message throughput
+Prometheus scrapes these metrics and stores them for visualization.
+
+### Grafana
+Grafana is used to visualize the metrics collected by Prometheus.
+Dashboards can display:
+ - Kafka consumer lag
+ - topic throughput
+ - broker availability
+ - system resource usage
+ - event processing metrics
+This allows quick detection of issues in the event pipeline.
+
+### Flow
+
+Kafka Broker
+     │
+     ▼
+Kafka Exporter
+     │
+     ▼
+Prometheus
+     │
+     ▼
+Grafana Dashboards
+
+
+---
+
 ##  Microservices Overview
 
 ### 1️ Configuration Server
