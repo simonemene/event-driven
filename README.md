@@ -92,6 +92,69 @@ Sink -->|Persistence Error| DLQTopic
 DLQTopic --> DLQService
 DLQService --> DLQStore
 ```
+---
+
+## CI/CD and Deployment Flow
+
+
+⚠️ Attenzione:  
+- ci devono essere **tre backtick prima e dopo**
+- dopo i primi backtick devi scrivere **`mermaid`**
+
+Quando fai **commit e push**, GitHub lo renderizza automaticamente come grafico.
+
+---
+
+### 2️⃣ Subito dopo puoi mettere il secondo grafico
+
+```markdown
+### CI/CD and Deployment Flow
+
+```mermaid
+flowchart LR
+
+Dev[Developer Push]
+
+Repo[GitHub Repository]
+
+CI[GitHub Actions Pipeline]
+
+Build[Maven Build]
+Tests[Run Tests]
+
+Jib[Build Images with Jib]
+
+Registry[Push Images to GHCR]
+
+Auth[Authenticate to Google Cloud]
+
+KubeCreds[Get Kubernetes Credentials]
+
+Helm[Helm Upgrade Install]
+
+Cluster[Google Kubernetes Engine]
+
+Pods[Rolling Update Pods]
+
+Dev --> Repo
+Repo --> CI
+
+CI --> Build
+Build --> Tests
+
+Tests --> Jib
+Jib --> Registry
+
+Registry --> Auth
+Auth --> KubeCreds
+
+KubeCreds --> Helm
+Helm --> Cluster
+
+Cluster --> Pods
+
+```
+
 
 ---
 
