@@ -87,6 +87,10 @@ jobs:
       - name: Install Helm
         uses: azure/setup-helm@v4
 
+      - name: Build Helm dependencies
+        run: |
+          helm dependency build ./helm/environment/env-prod  
+
       - name: Deploy with Helm
         run: |
           helm upgrade --install event-driven ./helm/environment/env-prod \
