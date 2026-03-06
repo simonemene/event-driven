@@ -44,6 +44,56 @@ Kafka Topics:
 
 ---
 
+## Architecture
+
+### Application Event Flow
+
+```mermaid
+flowchart LR
+
+Client[Client]
+
+Source[Source Service<br>REST API]
+Outbox[(Outbox Table)]
+Publisher[Scheduled Publisher]
+
+Kafka1[(Kafka<br>order-topic)]
+
+Processor[Processor Service]
+Idempotency[(Processed Events Table<br>Idempotency Check)]
+
+Kafka2[(Kafka<br>stock-topic)]
+
+Sink[Sink Service]
+DB[(MySQL Database)]
+
+DLQTopic[(DLQ Topics)]
+DLQService[DLQ Service]
+DLQStore[(Failure Storage)]
+
+Client --> Source
+Source --> Outbox
+Outbox --> Publisher
+Publisher --> Kafka1
+
+Kafka1 --> Processor
+
+Processor --> Idempotency
+
+Idempotency -->|Duplicate Event| Processor
+Idempotency -->|New Event| Kafka2
+
+Kafka2 --> Sink
+Sink --> DB
+
+Processor -->|Processing Error| DLQTopic
+Sink -->|Persistence Error| DLQTopic
+
+DLQTopic --> DLQService
+DLQService --> DLQStore
+
+---
+
 ##  Technologies Used
 
 - **Spring Boot**
