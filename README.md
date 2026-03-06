@@ -202,7 +202,63 @@ ghcr.io/<owner>/dlq:<sha>
 
 ### 7. Kubernetes Deployment (Helm)
 
-Stay tuned, deployment automation will be added shortly
+This repository includes a GitHub Actions pipeline that automates the build and delivery of all microservices.
+The pipeline is triggered automatically on every push and performs the following steps:
+
+## Build & Test
+The multi-module Maven project is compiled and verified:
+
+mvn clean verify
+
+This ensures that:
+ - the project compiles correctly
+ - all tests pass
+ - the build is reproducible
+  
+## Container Image Build
+Docker images are built using Jib, which allows building container images directly from Maven without requiring a Docker daemon.
+Each microservice produces its own container image.
+## Image Publishing
+Images are pushed to GitHub Container Registry (GHCR) under the repository Packages section.
+Each image is tagged using the commit SHA, providing immutable and traceable releases.
+
+Example image references:
+
+ghcr.io/<owner>/configserver:<sha>
+ghcr.io/<owner>/source:<sha>
+ghcr.io/<owner>/processor:<sha>
+ghcr.io/<owner>/sink:<sha>
+ghcr.io/<owner>/dlq:<sha>
+
+This approach ensures:
+ - immutable releases
+ - traceable deployments
+ - independent microservice versioning
+
+### 8 Continuous Deployment on Google Kubernetes Engine (GKE)
+
+After a successful build and image publication, the pipeline automatically deploys the system to a Google Kubernetes Engine (GKE) cluster.
+This enables a fully automated CI/CD workflow, where code changes propagate directly to the running infrastructure.
+
+## Deployment Flow
+
+- Authentication to Google Cloud
+The GitHub Actions runner authenticates to Google Cloud using a service account.
+
+Cluster credentials are retrieved using the Google Cloud CLI:
+
+gcloud container clusters get-credentials <cluster-name> --region <region>
+
+- Helm-Based Deployment
+All services are deployed using Helm charts.
+The pipeline performs an idempotent deployment using:
+
+helm upgrade --install event-driven ./helm/environment/env-prod
+
+This ensures:
+ - repeatable deployments
+ - versioned Helm releases
+ - safe rollouts of updated microservices
 
 
  Final Notes
