@@ -205,7 +205,7 @@ ghcr.io/<owner>/dlq:<sha>
 This repository includes a GitHub Actions pipeline that automates the build and delivery of all microservices.
 The pipeline is triggered automatically on every push and performs the following steps:
 
-# Build & Test
+#### Build & Test
 The multi-module Maven project is compiled and verified:
 
 mvn clean verify
@@ -215,10 +215,10 @@ This ensures that:
  - all tests pass
  - the build is reproducible
   
-## Container Image Build
+#### Container Image Build
 Docker images are built using Jib, which allows building container images directly from Maven without requiring a Docker daemon.
 Each microservice produces its own container image.
-## Image Publishing
+#### Image Publishing
 Images are pushed to GitHub Container Registry (GHCR) under the repository Packages section.
 Each image is tagged using the commit SHA, providing immutable and traceable releases.
 
@@ -240,7 +240,7 @@ This approach ensures:
 After a successful build and image publication, the pipeline automatically deploys the system to a Google Kubernetes Engine (GKE) cluster.
 This enables a fully automated CI/CD workflow, where code changes propagate directly to the running infrastructure.
 
-## Deployment Flow
+#### Deployment Flow
 
 - Authentication to Google Cloud
 The GitHub Actions runner authenticates to Google Cloud using a service account.
