@@ -6,7 +6,7 @@ appName: processor
 replicaCount: 1
 
 image:
-  repository: processor
+  repository: smene7/processor
   tag: s1
 
 containerPort: 8091

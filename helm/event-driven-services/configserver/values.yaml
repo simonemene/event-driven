@@ -6,7 +6,7 @@ appName: configserver
 replicaCount: 1
 
 image:
-  repository: configserver
+  repository: smene7/configserver
   tag: s1
 
 containerPort: 8081

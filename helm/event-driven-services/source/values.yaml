@@ -6,7 +6,7 @@ appName: source
 replicaCount: 1
 
 image:
-  repository: source
+  repository: smene7/source
   tag: s1
 
 containerPort: 8080
