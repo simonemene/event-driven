@@ -96,20 +96,6 @@ DLQService --> DLQStore
 
 ## CI/CD and Deployment Flow
 
-
-⚠️ Attenzione:  
-- ci devono essere **tre backtick prima e dopo**
-- dopo i primi backtick devi scrivere **`mermaid`**
-
-Quando fai **commit e push**, GitHub lo renderizza automaticamente come grafico.
-
----
-
-### 2️⃣ Subito dopo puoi mettere il secondo grafico
-
-```markdown
-### CI/CD and Deployment Flow
-
 ```mermaid
 flowchart LR
 
