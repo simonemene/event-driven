@@ -205,7 +205,7 @@ ghcr.io/<owner>/dlq:<sha>
 This repository includes a GitHub Actions pipeline that automates the build and delivery of all microservices.
 The pipeline is triggered automatically on every push and performs the following steps:
 
-## Build & Test
+# Build & Test
 The multi-module Maven project is compiled and verified:
 
 mvn clean verify
@@ -235,7 +235,7 @@ This approach ensures:
  - traceable deployments
  - independent microservice versioning
 
-### 8 Continuous Deployment on Google Kubernetes Engine (GKE)
+### 8. Continuous Deployment on Google Kubernetes Engine (GKE)
 
 After a successful build and image publication, the pipeline automatically deploys the system to a Google Kubernetes Engine (GKE) cluster.
 This enables a fully automated CI/CD workflow, where code changes propagate directly to the running infrastructure.
