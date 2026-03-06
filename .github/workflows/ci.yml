@@ -3,6 +3,7 @@ name: CI
 permissions:
   contents: read
   packages: write
+  id-token: write
 
 on:
   push:
@@ -10,7 +11,7 @@ on:
   pull_request:
     branches: ["main"]
   schedule:
-    - cron: "0 10 * * *" #minute,hour,day of mont,month,day of week
+    - cron: "0 10 * * *"
 
 jobs:
   build:
@@ -23,8 +24,8 @@ jobs:
       - name: Set up JDK 21
         uses: actions/setup-java@v4
         with:
-          distribution: 'temurin'
-          java-version: '21'
+          distribution: temurin
+          java-version: "21"
           cache: maven
 
       - name: Build with Maven
@@ -34,7 +35,7 @@ jobs:
         uses: codecov/codecov-action@v5
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
-          files: '**/target/site/jacoco/jacoco.xml'
+          files: "**/target/site/jacoco/jacoco.xml"
 
       - name: Login to GHCR
         run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
@@ -42,26 +43,47 @@ jobs:
       - name: Build configserver image
         run: |
           mvn -pl configserver compile jib:build \
-          -Dimage=ghcr.io/${{ github.repository_owner }}/configserver:${{ github.sha }}
+            -Dimage=ghcr.io/${{ github.repository_owner }}/configserver:${{ github.sha }}
 
       - name: Build processor image
         run: |
           mvn -pl processor compile jib:build \
-          -Dimage=ghcr.io/${{ github.repository_owner }}/processor:${{ github.sha }}
+            -Dimage=ghcr.io/${{ github.repository_owner }}/processor:${{ github.sha }}
 
       - name: Build sink image
         run: |
           mvn -pl sink compile jib:build \
-          -Dimage=ghcr.io/${{ github.repository_owner }}/sink:${{ github.sha }}
+            -Dimage=ghcr.io/${{ github.repository_owner }}/sink:${{ github.sha }}
 
       - name: Build dlq image
         run: |
           mvn -pl dlq compile jib:build \
-          -Dimage=ghcr.io/${{ github.repository_owner }}/dlq:${{ github.sha }}
+            -Dimage=ghcr.io/${{ github.repository_owner }}/dlq:${{ github.sha }}
 
       - name: Build source image
         run: |
           mvn -pl source compile jib:build \
-          -Dimage=ghcr.io/${{ github.repository_owner }}/source:${{ github.sha }}
-          
-      
+            -Dimage=ghcr.io/${{ github.repository_owner }}/source:${{ github.sha }}
+
+      - name: Authenticate to Google Cloud
+        uses: google-github-actions/auth@v2
+        with:
+          workload_identity_provider: projects/2380470496/locations/global/workloadIdentityPools/github-actions/providers/github
+          service_account: kubernetes-service-deploy@project-2155e9c5-71df-4d29-875.iam.gserviceaccount.com
+
+      - name: Setup gcloud
+        uses: google-github-actions/setup-gcloud@v2
+
+      - name: Get GKE credentials
+        run: |
+          gcloud container clusters get-credentials cluster-1 \
+            --zone us-central1-a \
+            --project project-2155e9c5-71df-4d29-875
+
+      - name: Install Helm
+        uses: azure/setup-helm@v4
+
+      - name: Deploy with Helm
+        run: |
+          helm upgrade --install event-driven ./helm/environment/env-prod \
+            --set image.tag=${{ github.sha }}
