@@ -266,3 +266,69 @@ This ensures:
 This project is not a toy example.
 The focus is not on frameworks, but on correct responsibilities, failure handling, and resilience.
 
+
+flowchart LR
+
+subgraph Client
+A[Client HTTP Request]
+end
+
+subgraph Source_Service
+B[REST Controller]
+C[Outbox Table]
+D[Scheduled Publisher]
+end
+
+subgraph Kafka
+E[order-topic]
+F[stock-topic]
+G[DLQ Topics]
+end
+
+subgraph Processor_Service
+H[Spring Cloud Stream Processor]
+end
+
+subgraph Sink_Service
+I[Spring Cloud Stream Sink]
+J[(MySQL Database)]
+end
+
+subgraph DLQ_Service
+K[DLQ Consumer]
+L[(Failure Storage)]
+end
+
+A --> B
+B --> C
+C --> D
+D --> E
+E --> H
+H --> F
+F --> I
+I --> J
+
+H -->|Processing Error| G
+I -->|Persistence Error| G
+
+G --> K
+K --> L
+
+subgraph CI_CD
+M[GitHub Actions Pipeline]
+N[Maven Build & Tests]
+O[Jib Image Build]
+P[Push Images to GHCR]
+end
+
+subgraph Kubernetes
+Q[Helm Deployment]
+R[Google Kubernetes Engine]
+end
+
+M --> N
+N --> O
+O --> P
+P --> Q
+Q --> R
+
