@@ -253,6 +253,18 @@ services:
       file: common-config.yml
       service: common-network
 
+  k6:
+    image: grafana/k6:latest
+    container_name: k6
+    volumes:
+      - ./k6:/scripts
+    networks:
+      - default
+    entrypoint: [ "k6" ]
+    extends:
+      file: common-config.yml
+      service: common-network
+
 
 
 
