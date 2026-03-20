@@ -3,7 +3,6 @@ package com.eventdriven.processor.stream;
 import com.eventdriven.processor.dto.OrderAvailableDto;
 import com.eventdriven.processor.dto.OrderDto;
 import com.eventdriven.processor.service.IRandomAvailableService;
-import com.eventdriven.processor.service.ISaveOrderService;
 import com.eventdriven.processor.service.RandomAvailableService;
 import jakarta.validation.Validator;
 import lombok.RequiredArgsConstructor;
@@ -15,8 +14,6 @@ import java.util.function.Function;
 @RequiredArgsConstructor
 @Configuration
 public class ProcessorConfiguration {
-
-    private final ISaveOrderService service;
 
     @Bean
     public IRandomAvailableService service()
