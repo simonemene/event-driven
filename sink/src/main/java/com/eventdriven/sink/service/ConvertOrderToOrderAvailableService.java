@@ -9,6 +9,7 @@ import jakarta.validation.ConstraintViolation;
 import jakarta.validation.Validator;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.dao.DuplicateKeyException;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Set;
@@ -33,7 +34,12 @@ public class ConvertOrderToOrderAvailableService implements IConvertOrderService
             throw new InvalidEventException(violations);
         }
         OrderAvailableEntity entity = mapper.toEntity(order);
-        log.info("Saving order {}",order.order().name());
-        repository.save(entity);
+        try {
+            log.info("Saving order {}",order.order().name());
+            repository.save(entity);
+        }catch(DuplicateKeyException duplicate)
+        {
+            log.info("[IDEMPOTENCY] Duplicate key: {}",order.order().id());
+        }
     }
 }
