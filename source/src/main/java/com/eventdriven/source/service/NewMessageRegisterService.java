@@ -34,7 +34,7 @@ public class NewMessageRegisterService implements INewMessageArrivedService{
 			String event = UUID.randomUUID().toString();
 			repository.save(
 					mapper.toDto(new MessageEventDto("", event,
-							createPayload(new OrderDto(order.name(), order.cost(),event),event))));
+							createPayload(new OrderDto(order.name(), order.cost()),event))));
 		}catch(Exception e)
 		{
 			log.error("JSON serialization failed",e);
