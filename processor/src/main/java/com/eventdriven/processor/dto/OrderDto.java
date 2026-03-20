@@ -7,11 +7,10 @@ import jakarta.validation.constraints.Positive;
 import java.math.BigDecimal;
 
 public record OrderDto(
-        @NotBlank(message = "Id must not be blank") String id,
+        @NotBlank(message = "Id must not be blank") String eventiId,
         @NotBlank(message = "Order name must not be blank") String name,
         @NotNull(message = "Cost must no be null")
         @Positive(message = "Order cost must be greater than zero")
-        BigDecimal cost,
-        String eventiId) {
+        BigDecimal cost) {
 
 }

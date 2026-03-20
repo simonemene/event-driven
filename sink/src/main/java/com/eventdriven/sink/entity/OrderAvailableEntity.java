@@ -12,11 +12,12 @@ import java.time.Instant;
 @Entity
 public class OrderAvailableEntity {
 
-    public OrderAvailableEntity(String name,BigDecimal cost, String statusStock)
+    public OrderAvailableEntity(String name,BigDecimal cost, String statusStock,String idEvent)
     {
         this.name = name;
         this.cost = cost;
         this.statusStock = statusStock;
+        this.idEvent = idEvent;
     }
 
     protected OrderAvailableEntity()
