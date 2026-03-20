@@ -21,6 +21,7 @@ The goal is not to show *how to send a message*, but **how to not lose it**.
 - **Controlled retries** – no infinite loops or blind retries
 - **Observability** – failures are visible and traceable
 - **Production-ready testing**
+- **Consistency** – atomic event processing and no duplicate side effects
 
 ---
 
@@ -78,13 +79,13 @@ Publisher --> Kafka1
 
 Kafka1 --> Processor
 
-Processor --> Idempotency
+Processor -->|Transactional Processing| Kafka2
 
 Idempotency -->|Duplicate Event| Processor
 Idempotency -->|New Event| Kafka2
 
 Kafka2 --> Sink
-Sink --> DB
+Sink -->|Idempotent Consumer| DB
 
 Processor -->|Processing Error| DLQTopic
 Sink -->|Persistence Error| DLQTopic
@@ -261,11 +262,20 @@ Spring Cloud Stream is intentionally **not used here**.
 - Enrich data (e.g. stock availability)
 - Publish to `stock-topic`
 
-This service uses **Spring Cloud Stream**:
-- automatic retry
-- automatic DLQ handling
-- no Kafka-specific code
-- fully asynchronous and decoupled
+This service uses **Spring Cloud Stream** with Kafka transactions:
+
+- **Transactional processing (Kafka → Kafka)** to guarantee atomicity between:
+  - message consumption
+  - message production
+  - offset commit
+
+- **Idempotent producer** (`enable.idempotence=true`) to prevent duplicates caused by retries
+
+- **acks=all** to ensure message durability through replication
+
+- **read_committed isolation level** to consume only committed records and avoid partial or aborted transactions
+
+This ensures **exactly-once processing semantics within Kafka**.
 
 ---
 
@@ -276,8 +286,23 @@ This service uses **Spring Cloud Stream**:
 - Validate payload
 - Persist data
 
-Any error (validation, mapping, DB failure) results in:
- automatic message redirection to DLQ.
+The Sink implements the **Idempotent Consumer Pattern**:
+
+- Each event carries a unique `eventId`
+- The database enforces a **UNIQUE constraint**
+- Duplicate events are:
+  - detected via `DuplicateKeyException`
+  - **logged and safely ignored**
+  - NOT retried
+
+Additionally:
+
+- The consumer uses **read_committed isolation** to avoid reading aborted transactional records
+- Only valid, committed messages are processed
+
+This guarantees:
+- no duplicate side effects in the database
+- safe handling of reprocessed events
 
 ---
 
@@ -301,6 +326,44 @@ Messages that fail repeatedly are parked for manual inspection.
 
 ###  Circuit Breaker
 Protects the Source application from wasting resources when Kafka is unavailable.
+
+### Kafka Transactions
+
+Used in the Processor service to guarantee atomic processing between input consumption and output production.
+
+Ensures:
+- no partial writes
+- no duplicate messages within Kafka
+- consistency of the event stream
+
+---
+
+##  Consistency Model
+
+The system guarantees consistency at two different levels:
+
+- **Kafka-level consistency**
+  - ensured via transactions
+  - atomic processing between topics
+  - no duplicate messages
+
+- **Business-level consistency**
+  - ensured via idempotent consumer
+  - duplicate events are safely ignored
+  - database state remains correct
+
+This separation allows high throughput while maintaining correctness.
+
+---
+
+### Idempotent Consumer
+
+Used in the Sink service to handle duplicate message delivery.
+
+Ensures:
+- safe reprocessing
+- no duplicate database writes
+- system stability under retry scenarios
 
 ---
 
