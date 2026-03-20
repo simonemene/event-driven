@@ -162,6 +162,17 @@ Cluster --> Pods
 
 ---
 
+## Load Testing with k6
+
+Run:
+
+docker compose run k6 run /scripts/load-test.js
+
+This simulates high load (2000+ requests) against the Source service,
+testing the full event-driven pipeline under stress.
+
+---
+
 ## Observability
 
 The system includes a basic observability stack to monitor both the infrastructure and the event-driven pipeline.
